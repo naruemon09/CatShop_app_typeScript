@@ -1,13 +1,14 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import type { ILogin } from "../../Interface/IAuth";
-import { useAuthStore } from "../store/Store";
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
+import type { ILogin } from '../../Interface/IAuth';
+import axios from 'axios';
+import { useAuthStore } from '../../Store';
 
-const Login: React.FC = () => {
+
+const LoginAdmin: React.FC = () => {
 
   const {setToken} = useAuthStore();
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const [user, setUser] = useState<ILogin>({
     username: "",
@@ -23,7 +24,7 @@ const Login: React.FC = () => {
       console.log(response);
       if (response.data.isSuceess === true) {
         setToken(response.data.token)
-        navigate('/')
+        navigate('/dashboard')
       } 
     } catch (error) {
       console.log(error);
@@ -31,9 +32,16 @@ const Login: React.FC = () => {
   };
 
   return (
+    <section
+      className="vh-100 d-flex justify-content-center align-items-center"
+      style={{ background: 'url("./src/images/background-img.png")' }}
+    >
       <div className="container">
         <div className="row">
-          <div className="form-input col-lg-12 my-4">
+          <div className="offset-md-3 col-md-6 my-5">
+            <h2 className="display-3 fw-normal text-center">
+              Login<span className="text-primary"> Admin</span>
+            </h2>
             <div className="mb-3">
               <input
                 type="text"
@@ -55,14 +63,15 @@ const Login: React.FC = () => {
               />
             </div>
             <div className="d-grid gap-2">
-              <button type="button" className="btn btn-dark btn-lg rounded-1" onClick={() => { onSubmit() }}>
+              <button type="submit" className="btn btn-dark btn-lg rounded-1" onClick={() => { onSubmit() }}>
                 Login it now
               </button>
             </div>
           </div>
         </div>
       </div>
-  );
-};
+    </section>
+  )
+}
 
-export default Login;
+export default LoginAdmin

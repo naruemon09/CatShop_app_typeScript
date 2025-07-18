@@ -6,6 +6,10 @@ export interface IRegister {
   birthdate: string;
   phone: string;
   address: string;
+  province: string;
+  distric: string;
+  subdistrict: string;
+  zipcode: string;
   password: string;
   gender: string;
   RoleList: Array<IRole>

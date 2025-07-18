@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../store/Store";
+import { useAuthStore } from "../../Store";
 
 const SidebarAdmin: React.FC = () => {
 

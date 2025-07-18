@@ -1,14 +1,16 @@
-import axios from "axios";
+import axios from "axios";const {token} = useAuthStore();
 import React, { useEffect, useState } from "react";
+import { useAuthStore } from "../../Store";
 
 const Admin: React.FC = () => {
+
+  
   const [user, setUser] = useState([]);
-  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const getUsers = async () => {
       try {
-        const response = await axios.get("https://localhost:7092/api/Users", {
+        const response = await axios.get("https://localhost:7092/api/Users/GetUserEmployee", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -47,6 +49,7 @@ const Admin: React.FC = () => {
                 <th>Name</th>
                 <th>Gender</th>
                 <th>Email</th>
+                <th>Phone</th>
                 <th>Address</th>
                 <th>Actions</th>
               </tr>
@@ -59,6 +62,7 @@ const Admin: React.FC = () => {
                   <td>{item.firstname} {item.lastname}</td>
                   <td>{item.gender === '0' ? 'Male' : 'Female'}</td>
                   <td>{item.email}</td>
+                  <td>{item.phone}</td>
                   <td>{item.address}</td>
                   <td>
                     <button className="btn btn-sm btn-warning me-2">

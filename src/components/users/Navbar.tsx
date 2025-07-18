@@ -1,6 +1,6 @@
 import React from "react";
 import Cart from "./Cart";
-import { useAuthStore } from "../store/Store";
+import { useAuthStore } from "../../Store";
 
 const Navbar: React.FC = () => {
   const {token , logout} = useAuthStore();

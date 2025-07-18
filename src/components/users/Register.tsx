@@ -13,6 +13,10 @@ const Register: React.FC = () => {
     birthdate: "",
     phone: "",
     address: "",
+    province: "",
+    distric: "",
+    subdistrict: "",
+    zipcode: "",
     password: "",
     gender: "",
     RoleList: [],
@@ -21,25 +25,24 @@ const Register: React.FC = () => {
   const [role, setRole] = useState<IRole[]>([]);
   const [province, setProvince] = useState<string[]>([]);
   const [distric, setDistric] = useState<string[]>([]);
-  const [subdistrict, setSubdistrict] = useState<string[]>([]); 
-  const [selectAddress, setselectAddress] = useState({
-    province: "",
-    distric: "",
-    subdistrict: "",
-    zipcode: ""
-  }); 
+  const [subdistrict, setSubdistrict] = useState<string[]>([]);
 
   useEffect(() => {
     const getRole = async () => {
       try {
         const response = await axios.get("https://localhost:7092/api/Roles");
         if (response.status === 200) {
-          const clientRoles = response.data.filter(r => r.rolename === "Client");
+          const clientRoles = response.data.filter(
+            (r) => r.rolename === "Client"
+          );
           setRole(clientRoles);
+          console.log('role',clientRoles)
         }
-        const provinces = await axios.get("https://localhost:7092/api/Address/GetProvince");
+        const provinces = await axios.get(
+          "https://localhost:7092/api/Address/GetProvince"
+        );
         if (provinces.status === 200) {
-          setProvince(provinces.data)
+          setProvince(provinces.data);
         }
       } catch (error) {
         console.log(error);
@@ -54,6 +57,7 @@ const Register: React.FC = () => {
         ...form,
         RoleList: role,
       };
+      console.log(formData);
       const response = await axios.post(
         "https://localhost:7092/api/Users/CreateUser",
         formData
@@ -68,31 +72,40 @@ const Register: React.FC = () => {
   };
 
   const selectProvince = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const item = event.target.value
-    setselectAddress({...selectAddress, province:item})
-    const districs = await axios.get("https://localhost:7092/api/Address/GetDistrict");
-    const findDistrics = districs.data.filter(r => r.provinceId === Number(item));
-    setDistric(findDistrics)
+    const item = event.target.value;
+    setForm({ ...form, province: item });
+    const districs = await axios.get(
+      "https://localhost:7092/api/Address/GetDistrict"
+    );
+    const findDistrics = districs.data.filter(
+      (r) => r.provinceId === Number(item)
+    );
+    setDistric(findDistrics);
   };
 
   const selectDistric = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const item = event.target.value
-    setselectAddress({...selectAddress, distric:item})
-    const subdistricts = await axios.get("https://localhost:7092/api/Address/GetSubdistrict");
-    const findSubdistrict = subdistricts.data.filter(r => r.districtId === Number(item));
-    setSubdistrict(findSubdistrict)
+    const item = event.target.value;
+    setForm({ ...form, distric: item });
+    const subdistricts = await axios.get(
+      "https://localhost:7092/api/Address/GetSubdistrict"
+    );
+    const findSubdistrict = subdistricts.data.filter(
+      (r) => r.districtId === Number(item)
+    );
+    setSubdistrict(findSubdistrict);
   };
 
-  const selectSubdistrict = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const item = event.target.value
-    const findZipcode = subdistrict.find(r => r.id === Number(item));
-    setselectAddress({...selectAddress, 
-      subdistrict:findZipcode.id ,
-      zipcode:findZipcode.zipCode
-    })
+  const selectSubdistrict = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const item = event.target.value;
+    const findZipcode = subdistrict.find((r) => r.id === Number(item));
+    setForm({
+      ...form,
+      subdistrict: findZipcode.id,
+      zipcode: findZipcode.zipCode,
+    });
   };
-
-  console.log(selectAddress)
 
   return (
     <div className="container">
@@ -185,7 +198,7 @@ const Register: React.FC = () => {
             />
           </div>
 
-          <div className="mb-3">
+          <div className="mb-3 mt-3">
             <input
               type="tel"
               className="form-control form-control-lg"
@@ -195,6 +208,13 @@ const Register: React.FC = () => {
             />
           </div>
 
+          <textarea
+            className="form-control form-control-lg"
+            value={form.address}
+            onChange={(e) => setForm({ ...form, address: e.target.value })}
+            placeholder="Enter Your Address"
+          />
+
           <div className="mb-3">
             <div className="row">
               <div className="col-md-3 mb-3">
@@ -203,9 +223,7 @@ const Register: React.FC = () => {
                   className="form-control dropdown-toggle"
                   onChange={(e) => selectProvince(e)}
                 >
-                  <option className="dropdown-item">
-                    Select Province
-                  </option>
+                  <option className="dropdown-item">Select Province</option>
 
                   {province.map((item, index) => (
                     <option
@@ -224,9 +242,7 @@ const Register: React.FC = () => {
                   className="form-control dropdown-toggle"
                   onChange={(e) => selectDistric(e)}
                 >
-                  <option className="dropdown-item">
-                    Select Distric
-                  </option>
+                  <option className="dropdown-item">Select Distric</option>
 
                   {distric.map((item, index) => (
                     <option
@@ -245,9 +261,7 @@ const Register: React.FC = () => {
                   className="form-control dropdown-toggle"
                   onChange={(e) => selectSubdistrict(e)}
                 >
-                  <option className="dropdown-item">
-                    Select Subdistrict
-                  </option>
+                  <option className="dropdown-item">Select Subdistrict</option>
                   {subdistrict.map((item, index) => (
                     <option
                       key={index}
@@ -264,17 +278,11 @@ const Register: React.FC = () => {
                 <input
                   type="text"
                   className="form-control"
-                  value={selectAddress.zipcode}
+                  value={form.zipcode}
                   readOnly
                 />
+              </div>
             </div>
-            </div>
-            <textarea
-              className="form-control form-control-lg"
-              value={form.address}
-              onChange={(e) => setForm({ ...form, address: e.target.value })}
-              placeholder="Enter Your Address"
-            />
           </div>
 
           <div className="d-grid gap-2">

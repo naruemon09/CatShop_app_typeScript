@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { AuthState } from '../../Interface/IAuth';
+import type { AuthState } from './Interface/IAuth';
 
 export const useAuthStore = create<AuthState>((set) => ({
     token: null,

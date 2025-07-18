@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { IRole } from "../../Interface/IAuth";
 import axios from "axios";
+import { useAuthStore } from "../../Store";
 
 const AddRoles: React.FC = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  const {token} = useAuthStore();
   const [role, setRole] = useState<IRole>({
     rolename: "",
     roleId:""

@@ -2,11 +2,15 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import type { IRegister, IRole } from "../../Interface/IAuth";
+import { useAuthStore } from "../../Store";
 
 const RegisterAdmin: React.FC = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  const {token} = useAuthStore();
   const [role, setRole] = useState<IRole[]>([]);
+  const [province, setProvince] = useState<string[]>([]);
+  const [distric, setDistric] = useState<string[]>([]);
+  const [subdistrict, setSubdistrict] = useState<string[]>([]);
   const [form, setForm] = useState<IRegister>({
     username: "",
     firstname: "",
@@ -15,6 +19,10 @@ const RegisterAdmin: React.FC = () => {
     birthdate: "",
     phone: "",
     address: "",
+    province: "",
+    distric: "",
+    subdistrict: "",
+    zipcode: "",
     password: "",
     gender: "",
     RoleList: [],
@@ -27,8 +35,13 @@ const RegisterAdmin: React.FC = () => {
       try {
         const response = await axios.get("https://localhost:7092/api/Roles");
         if (response.status === 200) {
-          console.log(response);
           setRole(response.data);
+        }
+        const provinces = await axios.get(
+          "https://localhost:7092/api/Address/GetProvince"
+        );
+        if (provinces.status === 200) {
+          setProvince(provinces.data);
         }
       } catch (error) {
         console.log(error);
@@ -73,6 +86,42 @@ const RegisterAdmin: React.FC = () => {
 
   const removeRole = (item: IRole) => {
     setSelectedRoles(selectedRoles.filter((r) => r.roleid !== item.roleid));
+  };
+
+  const selectProvince = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const item = event.target.value;
+    setForm({ ...form, province: item });
+    const districs = await axios.get(
+      "https://localhost:7092/api/Address/GetDistrict"
+    );
+    const findDistrics = districs.data.filter(
+      (r) => r.provinceId === Number(item)
+    );
+    setDistric(findDistrics);
+  };
+
+  const selectDistric = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const item = event.target.value;
+    setForm({ ...form, distric: item });
+    const subdistricts = await axios.get(
+      "https://localhost:7092/api/Address/GetSubdistrict"
+    );
+    const findSubdistrict = subdistricts.data.filter(
+      (r) => r.districtId === Number(item)
+    );
+    setSubdistrict(findSubdistrict);
+  };
+
+  const selectSubdistrict = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const item = event.target.value;
+    const findZipcode = subdistrict.find((r) => r.id === Number(item));
+    setForm({
+      ...form,
+      subdistrict: findZipcode.id,
+      zipcode: findZipcode.zipCode,
+    });
   };
 
   return (
@@ -214,6 +263,70 @@ const RegisterAdmin: React.FC = () => {
               </div>
             </div>
             <div className="mb-3 row">
+              <div className="col offset-md-2 mb-3">
+                <select
+                  className="form-control dropdown-toggle"
+                  onChange={(e) => selectProvince(e)}
+                >
+                  <option className="dropdown-item">Select Province</option>
+
+                  {province.map((item, index) => (
+                    <option
+                      key={index}
+                      className="dropdown-item"
+                      value={item.id}
+                    >
+                      {item.nameInThai}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="col mb-3">
+                <select
+                  className="form-control dropdown-toggle"
+                  onChange={(e) => selectDistric(e)}
+                >
+                  <option className="dropdown-item">Select Distric</option>
+
+                  {distric.map((item, index) => (
+                    <option
+                      key={index}
+                      className="dropdown-item"
+                      value={item.id}
+                    >
+                      {item.nameInThai}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="col mb-3">
+                <select
+                  className="form-control dropdown-toggle"
+                  onChange={(e) => selectSubdistrict(e)}
+                >
+                  <option className="dropdown-item">Select Subdistrict</option>
+                  {subdistrict.map((item, index) => (
+                    <option
+                      key={index}
+                      className="dropdown-item"
+                      value={item.id}
+                    >
+                      {item.nameInThai}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="col mb-3">
+                <input
+                  type="text"
+                  className="form-control"
+                  value={form.zipcode}
+                  readOnly
+                  placeholder="Zipcode"
+                />
+              </div>
+            </div>
+            <div className="mb-3 row">
               <label className="col-sm-2 col-form-label">Position</label>
               <div className="col-md-6 mb-3">
                 <div className="dropdown">
@@ -259,14 +372,21 @@ const RegisterAdmin: React.FC = () => {
               </div>
             </div>
 
-            <div className="d-grid gap-2">
-              <button
-                type="submit"
-                className="btn btn-dark btn-lg rounded-1"
-                onClick={onSubmit}
-              >
-                Register it now
-              </button>
+            <div className="row">
+              <div className="text-end">
+                <button
+                  className="btn btn-success me-2"
+                  type="button"
+                  onClick={() => {
+                    onSubmit();
+                  }}
+                >
+                  Save
+                </button>
+                <a href="/userAdmin" className="btn btn-danger">
+                  Cancle
+                </a>
+              </div>
             </div>
           </div>
         </div>
