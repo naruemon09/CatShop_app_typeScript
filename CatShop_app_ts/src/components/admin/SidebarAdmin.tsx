@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/Store";
 
 const SidebarAdmin: React.FC = () => {
 
+  const {token , logout} = useAuthStore();
   const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -18,10 +20,8 @@ const SidebarAdmin: React.FC = () => {
     navigate("/admin");
   }
 
-  const logout = () => {
-    localStorage.removeItem("username");
-    localStorage.removeItem("token");
-    navigate("/admin");
+  const handleLogout = () => {
+    logout();
   };
 
   return (
@@ -235,7 +235,7 @@ const SidebarAdmin: React.FC = () => {
                   d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"
                 />
               </svg>
-              {!isCollapsed && <span className="flex-grow-1 px-3">{username}</span>}
+              {!isCollapsed && <span className="flex-grow-1 px-3">{token}</span>}
             </a>
             <ul
               className="dropdown-menu position-fixed m-4"
@@ -258,7 +258,7 @@ const SidebarAdmin: React.FC = () => {
               </li>
               <div className="dropdown-divider"></div>
               <li>
-                <button className="dropdown-item" onClick={() => {logout()}}>
+                <button className="dropdown-item" onClick={() => {handleLogout()}}>
                   Logout
                 </button>
               </li>

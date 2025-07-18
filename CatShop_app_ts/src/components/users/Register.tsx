@@ -25,7 +25,8 @@ const Register: React.FC = () => {
   const [selectAddress, setselectAddress] = useState({
     province: "",
     distric: "",
-    subdistrict: ""
+    subdistrict: "",
+    zipcode: ""
   }); 
 
   useEffect(() => {
@@ -82,7 +83,16 @@ const Register: React.FC = () => {
     setSubdistrict(findSubdistrict)
   };
 
-    console.log(selectAddress)
+  const selectSubdistrict = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const item = event.target.value
+    const findZipcode = subdistrict.find(r => r.id === Number(item));
+    setselectAddress({...selectAddress, 
+      subdistrict:findZipcode.id ,
+      zipcode:findZipcode.zipCode
+    })
+  };
+
+  console.log(selectAddress)
 
   return (
     <div className="container">
@@ -194,7 +204,7 @@ const Register: React.FC = () => {
                   onChange={(e) => selectProvince(e)}
                 >
                   <option className="dropdown-item">
-                    ---Select Province---
+                    Select Province
                   </option>
 
                   {province.map((item, index) => (
@@ -215,7 +225,7 @@ const Register: React.FC = () => {
                   onChange={(e) => selectDistric(e)}
                 >
                   <option className="dropdown-item">
-                    ---Select Distric---
+                    Select Distric
                   </option>
 
                   {distric.map((item, index) => (
@@ -233,10 +243,10 @@ const Register: React.FC = () => {
                 <label className="col-sm-2 col-form-label">Subdistrict</label>
                 <select
                   className="form-control dropdown-toggle"
-                  onChange={(e) => setselectAddress({ ...selectAddress, subdistrict: e.target.value })}
+                  onChange={(e) => selectSubdistrict(e)}
                 >
                   <option className="dropdown-item">
-                    ---Select Subdistrict---
+                    Select Subdistrict
                   </option>
                   {subdistrict.map((item, index) => (
                     <option
@@ -251,14 +261,13 @@ const Register: React.FC = () => {
               </div>
               <div className="col-md-3 mb-3">
                 <label className="col-sm-2 col-form-label">Zipcode</label>
-                <select className="form-control dropdown-toggle">
-                  {subdistrict.map((item, index) => (
-                    <option>
-                      {item.zipCode}
-                    </option>
-                  ))}
-                </select>
-              </div>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={selectAddress.zipcode}
+                  readOnly
+                />
+            </div>
             </div>
             <textarea
               className="form-control form-control-lg"

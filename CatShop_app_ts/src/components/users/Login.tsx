@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import type { ILogin } from "../../Interface/IAuth";
+import { useAuthStore } from "../store/Store";
 
 const Login: React.FC = () => {
 
-  const navigate = useNavigate()
+  const {setToken} = useAuthStore();
+  const navigate = useNavigate();
 
   const [user, setUser] = useState<ILogin>({
     username: "",
@@ -20,24 +22,15 @@ const Login: React.FC = () => {
       );
       console.log(response);
       if (response.data.isSuceess === true) {
-        localStorage.setItem("token", response.data.token)
-        localStorage.setItem("username", response.data.userName)
-        console.log(response)
+        setToken(response.data.token)
         navigate('/')
-      } else {
-        localStorage.removeItem("username");
-        localStorage.removeItem("token");
-      }
+      } 
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    // <section
-    //   className="vh-100 d-flex justify-content-center align-items-center"
-    //   style={{ background: 'url("./src/images/background-img.png")' }}
-    // >
       <div className="container">
         <div className="row">
           <div className="form-input col-lg-12 my-4">
@@ -66,15 +59,9 @@ const Login: React.FC = () => {
                 Login it now
               </button>
             </div>
-            {/* <div className="mt-4 text-center">
-              <p className="mb-0 fw-normal">Don't have an account? 
-                <a href="/register" className="fw-bold text-primary"> Sign Up</a>
-              </p>
-            </div> */}
           </div>
         </div>
       </div>
-    // </section>
   );
 };
 

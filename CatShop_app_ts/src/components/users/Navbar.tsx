@@ -1,13 +1,12 @@
 import React from "react";
 import Cart from "./Cart";
+import { useAuthStore } from "../store/Store";
 
 const Navbar: React.FC = () => {
-  const username = localStorage.getItem("username");
-  console.log(username);
+  const {token , logout} = useAuthStore();
 
-  const logout = () => {
-    localStorage.removeItem("username");
-    localStorage.removeItem("token");
+  const handleLogout = () => {
+    logout();
   };
 
   return (
@@ -75,7 +74,7 @@ const Navbar: React.FC = () => {
         <nav className="main-menu d-flex navbar navbar-expand-lg ">
           <div className="d-flex d-lg-none align-items-end mt-3">
             <ul className="d-flex justify-content-end list-unstyled m-0">
-                {username ? (
+                {token ? (
                     <li className="nav-item dropdown mb-2">
                       <a
                         className="mx-3"
@@ -96,7 +95,7 @@ const Navbar: React.FC = () => {
                       >
                         <li className="m-3">
                           <a className="dropdown-item " href="/account">
-                            Welcome , {username}
+                            Welcome , {token}
                           </a>
                         </li>
 
@@ -111,7 +110,7 @@ const Navbar: React.FC = () => {
                           <button
                             className="dropdown-item"
                             onClick={() => {
-                              logout();
+                              handleLogout();
                             }}
                           >
                             Logout
@@ -369,7 +368,7 @@ const Navbar: React.FC = () => {
 
               <div className="d-none d-lg-flex align-items-end">
                 <ul className="d-flex justify-content-end list-unstyled m-0">
-                  {username ? (
+                  {token ? (
                     <li className="nav-item dropdown mb-2">
                       <a
                         className="mx-3"
@@ -390,7 +389,7 @@ const Navbar: React.FC = () => {
                       >
                         <li>
                           <a className="dropdown-item" href="/account">
-                            Welcome , {username}
+                            Welcome , {token}
                           </a>
                         </li>
 
@@ -405,7 +404,7 @@ const Navbar: React.FC = () => {
                           <button
                             className="dropdown-item"
                             onClick={() => {
-                              logout();
+                              handleLogout();
                             }}
                           >
                             Logout
