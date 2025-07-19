@@ -1,6 +1,9 @@
 import React from 'react'
+import Store from '../store/Store';
+
 
 const Dashboard: React.FC = () => {
+  const {token} = Store();
 
   return (
     <div className="flex-grow-1 p-4">

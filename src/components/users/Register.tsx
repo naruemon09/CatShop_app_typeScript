@@ -13,9 +13,9 @@ const Register: React.FC = () => {
     birthdate: "",
     phone: "",
     address: "",
-    province: "",
-    distric: "",
-    subdistrict: "",
+    provinceId: 0,
+    disctricId: 0,
+    subdisctricId: 0,
     zipcode: "",
     password: "",
     gender: "",
@@ -36,7 +36,6 @@ const Register: React.FC = () => {
             (r) => r.rolename === "Client"
           );
           setRole(clientRoles);
-          console.log('role',clientRoles)
         }
         const provinces = await axios.get(
           "https://localhost:7092/api/Address/GetProvince"
@@ -73,7 +72,7 @@ const Register: React.FC = () => {
 
   const selectProvince = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const item = event.target.value;
-    setForm({ ...form, province: item });
+    setForm({ ...form, provinceId: Number(item) });
     const districs = await axios.get(
       "https://localhost:7092/api/Address/GetDistrict"
     );
@@ -85,7 +84,7 @@ const Register: React.FC = () => {
 
   const selectDistric = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const item = event.target.value;
-    setForm({ ...form, distric: item });
+    setForm({ ...form, disctricId: Number(item)});
     const subdistricts = await axios.get(
       "https://localhost:7092/api/Address/GetSubdistrict"
     );
@@ -102,7 +101,7 @@ const Register: React.FC = () => {
     const findZipcode = subdistrict.find((r) => r.id === Number(item));
     setForm({
       ...form,
-      subdistrict: findZipcode.id,
+      subdisctricId: findZipcode.id,
       zipcode: findZipcode.zipCode,
     });
   };
@@ -231,7 +230,7 @@ const Register: React.FC = () => {
                       className="dropdown-item"
                       value={item.id}
                     >
-                      {item.nameInThai}
+                      {item.nameInEnglish}
                     </option>
                   ))}
                 </select>
@@ -250,7 +249,7 @@ const Register: React.FC = () => {
                       className="dropdown-item"
                       value={item.id}
                     >
-                      {item.nameInThai}
+                      {item.nameInEnglish}
                     </option>
                   ))}
                 </select>
@@ -268,7 +267,7 @@ const Register: React.FC = () => {
                       className="dropdown-item"
                       value={item.id}
                     >
-                      {item.nameInThai}
+                      {item.nameInEnglish}
                     </option>
                   ))}
                 </select>

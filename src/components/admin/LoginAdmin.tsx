@@ -2,12 +2,11 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import type { ILogin } from '../../Interface/IAuth';
 import axios from 'axios';
-import { useAuthStore } from '../../Store';
-
+import Store from '../store/Store';
 
 const LoginAdmin: React.FC = () => {
 
-  const {setToken} = useAuthStore();
+  const {setToken , setUsername} = Store();
   const navigate = useNavigate()
 
   const [user, setUser] = useState<ILogin>({
@@ -22,10 +21,13 @@ const LoginAdmin: React.FC = () => {
         user
       );
       console.log(response);
-      if (response.data.isSuceess === true) {
+      if (response.data.isSuceess === true && response.data.rolename !== 'Client') {
         setToken(response.data.token)
+        setUsername(response.data.userName)
         navigate('/dashboard')
-      } 
+      } else {
+        swal("Oops...", "Something went wrong!", "error");
+      }
     } catch (error) {
       console.log(error);
     }

@@ -6,9 +6,9 @@ export interface IRegister {
   birthdate: string;
   phone: string;
   address: string;
-  province: string;
-  distric: string;
-  subdistrict: string;
+  provinceId: number;
+  disctricId: number;
+  subdisctricId: number;
   zipcode: string;
   password: string;
   gender: string;
@@ -32,10 +32,4 @@ export interface IRole {
 export interface IRolesMapping {
   username: string;
   roleList: IRole[];
-}
-
-export interface AuthState {
-  token: string | null;
-  setToken: (token: string | null) => void;
-  logout: () => void;
 }

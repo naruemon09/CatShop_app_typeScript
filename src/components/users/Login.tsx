@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import type { ILogin } from "../../Interface/IAuth";
-import { useAuthStore } from "../../Store";
+import Store from "../store/Store";
+import swal from 'sweetalert';
 
 const Login: React.FC = () => {
 
-  const {setToken} = useAuthStore();
+  const {setToken , setUsername} = Store();
   const navigate = useNavigate();
 
   const [user, setUser] = useState<ILogin>({
@@ -20,11 +21,13 @@ const Login: React.FC = () => {
         'https://localhost:7092/api/Logins/LoginUser',
         user
       );
-      console.log(response);
-      if (response.data.isSuceess === true) {
+      if (response.data.isSuceess === true && response.data.rolename === 'Client') {
         setToken(response.data.token)
+        setUsername(response.data.userName)
         navigate('/')
-      } 
+      } else {
+        swal("Oops...", "Something went wrong!", "error");
+      }
     } catch (error) {
       console.log(error);
     }

@@ -1,6 +1,10 @@
 import React from "react";
 
+
 const AddCats = () => {
+
+
+
   return (
     <div className="container-fluid p-4">
       <h2 className="fw-bold">Add Cats</h2>

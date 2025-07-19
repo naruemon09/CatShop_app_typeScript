@@ -1,5 +1,4 @@
 export interface IBreeds {
-  breedid: string;
   breedname:string;
 }
 

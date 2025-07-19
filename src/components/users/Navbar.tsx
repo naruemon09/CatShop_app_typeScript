@@ -1,9 +1,9 @@
 import React from "react";
 import Cart from "./Cart";
-import { useAuthStore } from "../../Store";
+import Store from "../store/Store";
 
 const Navbar: React.FC = () => {
-  const {token , logout} = useAuthStore();
+  const {token , username , logout} = Store();
 
   const handleLogout = () => {
     logout();
@@ -95,7 +95,7 @@ const Navbar: React.FC = () => {
                       >
                         <li className="m-3">
                           <a className="dropdown-item " href="/account">
-                            Welcome , {token}
+                            Welcome , {username}
                           </a>
                         </li>
 
@@ -389,7 +389,7 @@ const Navbar: React.FC = () => {
                       >
                         <li>
                           <a className="dropdown-item" href="/account">
-                            Welcome , {token}
+                            Welcome , {username}
                           </a>
                         </li>
 

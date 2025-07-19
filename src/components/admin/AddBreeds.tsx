@@ -2,22 +2,30 @@ import React, { useState } from "react";
 import type { IBreeds } from "../../Interface/ICats";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Store from "../store/Store";
+
 
 const AddBreeds: React.FC = () => {
+
+  const {token} = Store();
   const navigate = useNavigate();
   const [breed, setBreed] = useState<IBreeds>({
-    breedid: "",
     breedname: "",
   });
 
   const onSubmit = async () => {
     try {
       const response = await axios.post(
-        "https://localhost:7092/api/Breeds",
-        breed
+        "https://localhost:7092/api/Breeds/CreateBreeds",
+        breed,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       console.log(response);
-      if (response.data.isSuceess === true) {
+      if (response.data === "Create Success") {
         navigate("/breeds");
       }
     } catch (error) {

@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import type { IRegister, IRole } from "../../Interface/IAuth";
-import { useAuthStore } from "../../Store";
+import Store from "../store/Store";
 
 const RegisterAdmin: React.FC = () => {
   const navigate = useNavigate();
-  const {token} = useAuthStore();
+  const {token} = Store();
   const [role, setRole] = useState<IRole[]>([]);
   const [province, setProvince] = useState<string[]>([]);
   const [distric, setDistric] = useState<string[]>([]);
@@ -19,9 +19,9 @@ const RegisterAdmin: React.FC = () => {
     birthdate: "",
     phone: "",
     address: "",
-    province: "",
-    distric: "",
-    subdistrict: "",
+    provinceId: 0,
+    disctricId: 0,
+    subdisctricId: 0,
     zipcode: "",
     password: "",
     gender: "",
@@ -90,7 +90,7 @@ const RegisterAdmin: React.FC = () => {
 
   const selectProvince = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const item = event.target.value;
-    setForm({ ...form, province: item });
+    setForm({ ...form, provinceId: Number(item) });
     const districs = await axios.get(
       "https://localhost:7092/api/Address/GetDistrict"
     );
@@ -102,7 +102,7 @@ const RegisterAdmin: React.FC = () => {
 
   const selectDistric = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const item = event.target.value;
-    setForm({ ...form, distric: item });
+    setForm({ ...form, disctricId: Number(item) });
     const subdistricts = await axios.get(
       "https://localhost:7092/api/Address/GetSubdistrict"
     );
@@ -119,7 +119,7 @@ const RegisterAdmin: React.FC = () => {
     const findZipcode = subdistrict.find((r) => r.id === Number(item));
     setForm({
       ...form,
-      subdistrict: findZipcode.id,
+      subdisctricId: findZipcode.id,
       zipcode: findZipcode.zipCode,
     });
   };
@@ -276,7 +276,7 @@ const RegisterAdmin: React.FC = () => {
                       className="dropdown-item"
                       value={item.id}
                     >
-                      {item.nameInThai}
+                      {item.nameInEnglish}
                     </option>
                   ))}
                 </select>
@@ -294,7 +294,7 @@ const RegisterAdmin: React.FC = () => {
                       className="dropdown-item"
                       value={item.id}
                     >
-                      {item.nameInThai}
+                      {item.nameInEnglish}
                     </option>
                   ))}
                 </select>
@@ -311,7 +311,7 @@ const RegisterAdmin: React.FC = () => {
                       className="dropdown-item"
                       value={item.id}
                     >
-                      {item.nameInThai}
+                      {item.nameInEnglish}
                     </option>
                   ))}
                 </select>

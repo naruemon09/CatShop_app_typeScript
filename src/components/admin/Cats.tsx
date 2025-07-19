@@ -1,6 +1,11 @@
 import React from "react";
+import Store from "../store/Store";
+
 
 const Cats: React.FC = () => {
+
+  const {token} = Store();
+
   return (
     <div className="container-fluid p-4">
       <div className="d-flex justify-content-between align-items-center mb-3">

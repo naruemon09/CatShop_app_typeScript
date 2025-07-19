@@ -1,10 +1,10 @@
-import axios from "axios";const {token} = useAuthStore();
+import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useAuthStore } from "../../Store";
+import Store from "../store/Store";
 
 const Admin: React.FC = () => {
 
-  
+  const {token} = Store();
   const [user, setUser] = useState([]);
 
   useEffect(() => {
@@ -51,6 +51,7 @@ const Admin: React.FC = () => {
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Address</th>
+                <th>Position</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -64,6 +65,7 @@ const Admin: React.FC = () => {
                   <td>{item.email}</td>
                   <td>{item.phone}</td>
                   <td>{item.address}</td>
+                  <td>{item.rolename}</td>
                   <td>
                     <button className="btn btn-sm btn-warning me-2">
                       Edit

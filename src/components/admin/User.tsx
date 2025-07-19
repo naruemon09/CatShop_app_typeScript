@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { useAuthStore } from '../../Store';
+import Store from '../store/Store';
 import axios from 'axios';
 
 const User: React.FC = () => {
 
-  const {token} = useAuthStore();
+  const {token} = Store();
   const [user, setUser] = useState([]);
 
   useEffect(() => {
@@ -42,7 +42,6 @@ const User: React.FC = () => {
                 <th>Gender</th>
                 <th>Email</th>
                 <th>Address</th>
-                <th>Position</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -54,7 +53,6 @@ const User: React.FC = () => {
                   <td>{item.firstname} {item.lastname}</td>
                   <td>{item.gender === '0' ? 'Male' : 'Female'}</td>
                   <td>{item.email}</td>
-                  <td>{item.rolename}</td>
                   <td>{item.address}</td>
                   <td>
                     <button className="btn btn-sm btn-warning me-2">
