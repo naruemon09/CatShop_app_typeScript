@@ -1,12 +1,59 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Cart from "./Cart";
 import Store from "../store/Store";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import type { IGetBreeds } from "../../Interface/ICats";
+import type { IGetOrder } from "../../Interface/IOrder";
 
 const Navbar: React.FC = () => {
-  const {token , username , logout} = Store();
+  const { token, username, logout } = Store();
 
   const handleLogout = () => {
     logout();
+  };
+
+  const navigate = useNavigate();
+
+  const [breeds, setBreeds] = useState<IGetBreeds[]>([]);
+  const [cats, setCats] = useState<IGetOrder[]>([]);
+  const totalPrice = cats.reduce((sum, r) => sum + Number(r.price), 0);
+
+  useEffect(() => {
+    const getBreeds = async () => {
+      try {
+        const response = await axios.get<IGetBreeds[]>("https://localhost:7092/api/Breeds", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.status === 200) {
+          console.log(response);
+          setBreeds(response.data);
+        }
+        const responseCat = await axios.get<IGetOrder[]>(
+          `https://localhost:7092/api/Orders/GetAllOrderByUser`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (responseCat.status === 200) {
+          const filterOrder = responseCat.data.filter(
+            (x) => x.orderStatus === "Pending"
+          );
+          setCats(filterOrder);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getBreeds();
+  }, [cats , breeds]);
+
+  const handleBreed = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    navigate("/shop", { state: { breedid: event.target.value } });
   };
 
   return (
@@ -30,8 +77,6 @@ const Navbar: React.FC = () => {
               <form
                 id="search-form"
                 className="text-center d-flex align-items-center"
-                action=""
-                method=""
               >
                 <input
                   type="text"
@@ -71,69 +116,80 @@ const Navbar: React.FC = () => {
       </div>
 
       <div className="container">
-        <nav className="main-menu d-flex navbar navbar-expand-lg ">
-          <div className="d-flex d-lg-none align-items-end mt-3">
+        <nav className="main-menu d-flex navbar navbar-expand-lg">
+          <div className="d-flex d-lg-none align-items-end">
             <ul className="d-flex justify-content-end list-unstyled m-0">
-                {token ? (
-                    <li className="nav-item dropdown mb-2">
-                      <a
-                        className="mx-3"
-                        role="button"
-                        id="person"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                      >
-                        <iconify-icon
-                          icon="healthicons:person"
-                          className="fs-4"
-                        ></iconify-icon>
+              {token ? (
+                <li className="nav-item dropdown mb-2">
+                  <a
+                    className="mx-3"
+                    role="button"
+                    id="person"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 48 48"
+                    >
+                      <g fill="currentColor">
+                        <path d="M6 36c0-4.965 11.993-8 18-8c6.008 0 18 3.035 18 8v6H6z"></path>
+                        <path
+                          fill-rule="evenodd"
+                          d="M24 26c5.523 0 10-4.477 10-10S29.523 6 24 6s-10 4.477-10 10s4.477 10 10 10"
+                          clip-rule="evenodd"
+                        ></path>
+                      </g>
+                    </svg>
+                  </a>
+
+                  <ul className="dropdown-menu m-2" aria-labelledby="person">
+                    <li className="m-3">
+                      <a className="dropdown-item " href="#">
+                        Welcome , {username}
                       </a>
-
-                      <ul
-                        className="dropdown-menu m-2"
-                        aria-labelledby="person"
-                      >
-                        <li className="m-3">
-                          <a className="dropdown-item " href="/account">
-                            Welcome , {username}
-                          </a>
-                        </li>
-
-                        <li className="m-3">
-                          <a className="dropdown-item" href="/account">
-                            Profile
-                          </a>
-                        </li>
-
-                        <div className="dropdown-divider"></div>
-                        <li>
-                          <button
-                            className="dropdown-item"
-                            onClick={() => {
-                              handleLogout();
-                            }}
-                          >
-                            Logout
-                          </button>
-                        </li>
-                      </ul>
                     </li>
-                  ) : (
-                    <a href="/account" className="mx-3">
-                      <iconify-icon
-                        icon="healthicons:person"
-                        className="fs-4"
-                      ></iconify-icon>
-                    </a>
-                  )}
-              <li>
-                <a href="wishlist.html" className="mx-3">
-                  <iconify-icon
-                    icon="mdi:heart"
-                    className="fs-4"
-                  ></iconify-icon>
+
+                    <li className="m-3">
+                      <a className="dropdown-item" href="/profile">
+                        My Account
+                      </a>
+                    </li>
+
+                    <div className="dropdown-divider"></div>
+                    <li>
+                      <button
+                        className="dropdown-item"
+                        onClick={() => {
+                          handleLogout();
+                        }}
+                      >
+                        Logout
+                      </button>
+                    </li>
+                  </ul>
+                </li>
+              ) : (
+                <a href="/account" className="mx-3">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 48 48"
+                  >
+                    <g fill="currentColor">
+                      <path d="M6 36c0-4.965 11.993-8 18-8c6.008 0 18 3.035 18 8v6H6z"></path>
+                      <path
+                        fill-rule="evenodd"
+                        d="M24 26c5.523 0 10-4.477 10-10S29.523 6 24 6s-10 4.477-10 10s4.477 10 10 10"
+                        clip-rule="evenodd"
+                      ></path>
+                    </g>
+                  </svg>
                 </a>
-              </li>
+              )}
 
               <li>
                 <a
@@ -143,12 +199,19 @@ const Navbar: React.FC = () => {
                   data-bs-target="#offcanvasCart"
                   aria-controls="offcanvasCart"
                 >
-                  <iconify-icon
-                    icon="mdi:cart"
-                    className="fs-4 position-relative"
-                  ></iconify-icon>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M17 18c-1.11 0-2 .89-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2M1 2v2h2l3.6 7.59l-1.36 2.45c-.15.28-.24.61-.24.96a2 2 0 0 0 2 2h12v-2H7.42a.25.25 0 0 1-.25-.25q0-.075.03-.12L8.1 13h7.45c.75 0 1.41-.42 1.75-1.03l3.58-6.47c.07-.16.12-.33.12-.5a1 1 0 0 0-1-1H5.21l-.94-2M7 18c-1.11 0-2 .89-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2"
+                    ></path>
+                  </svg>
                   <span className="position-absolute translate-middle badge rounded-circle bg-primary pt-2">
-                    03
+                    {cats.length}
                   </span>
                 </a>
               </li>
@@ -161,10 +224,21 @@ const Navbar: React.FC = () => {
                   data-bs-target="#offcanvasSearch"
                   aria-controls="offcanvasSearch"
                 >
-                  <iconify-icon
-                    icon="tabler:search"
-                    className="fs-4"
-                  ></iconify-icon>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0-14 0m18 11l-6-6"
+                    ></path>
+                  </svg>
                 </a>
               </li>
             </ul>
@@ -182,7 +256,6 @@ const Navbar: React.FC = () => {
 
           <div
             className="offcanvas offcanvas-end"
-            tabindex="-1"
             id="offcanvasNavbar"
             aria-labelledby="offcanvasNavbarLabel"
           >
@@ -196,12 +269,16 @@ const Navbar: React.FC = () => {
             </div>
 
             <div className="offcanvas-body justify-content-between">
-              <select className="filter-categories border-0 mb-0 me-5">
-                <option>Shop by Category</option>
-                <option>Clothes</option>
-                <option>Food</option>
-                <option>Food</option>
-                <option>Toy</option>
+              <select
+                className="filter-categories border-0 mb-0 me-5"
+                onChange={(e) => {
+                  handleBreed(e);
+                }}
+              >
+                <option>Shop by Breeds</option>
+                {breeds.map((item) => (
+                  <option value={item.breedid}>{item.breedname}</option>
+                ))}
               </select>
 
               <ul className="navbar-nav menu-list list-unstyled d-flex gap-md-3 mb-0">
@@ -222,117 +299,35 @@ const Navbar: React.FC = () => {
                   </a>
                   <ul className="dropdown-menu" aria-labelledby="pages">
                     <li>
-                      <a href="" className="dropdown-item">
+                      <a href="/about" className="dropdown-item">
                         About Us
-                        <span className="badge bg-success text-dark ms-2">
-                          PRO
-                        </span>
                       </a>
                     </li>
                     <li>
                       <a href="/shop" className="dropdown-item">
                         Shop
-                        <span className="badge bg-success text-dark ms-2">
-                          PRO
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="dropdown-item">
-                        Single Product
-                        <span className="badge bg-success text-dark ms-2">
-                          PRO
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="/cart" className="dropdown-item">
-                        Cart
-                        <span className="badge bg-success text-dark ms-2">
-                          PRO
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="dropdown-item">
-                        Wishlist
-                        <span className="badge bg-success text-dark ms-2">
-                          PRO
-                        </span>
                       </a>
                     </li>
                     <li>
                       <a href="/checkout" className="dropdown-item">
                         Checkout
-                        <span className="badge bg-success text-dark ms-2">
-                          PRO
-                        </span>
                       </a>
                     </li>
                     <li>
-                      <a href="blog.html" className="dropdown-item">
-                        Blog
-                        <span className="badge bg-success text-dark ms-2">
-                          PRO
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="dropdown-item">
-                        Single Post
-                        <span className="badge bg-success text-dark ms-2">
-                          PRO
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="contact.html" className="dropdown-item">
+                      <a href="/contact" className="dropdown-item">
                         Contact
-                        <span className="badge bg-success text-dark ms-2">
-                          PRO
-                        </span>
                       </a>
                     </li>
                     <li>
-                      <a href="" className="dropdown-item">
-                        FAQs
-                        <span className="badge bg-success text-dark ms-2">
-                          PRO
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="/account" className="dropdown-item">
-                        Account
-                        <span className="badge bg-success text-dark ms-2">
-                          PRO
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="thank-you.html" className="dropdown-item">
-                        Thankyou
-                        <span className="badge bg-success text-dark ms-2">
-                          PRO
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="dropdown-item">
-                        Error 404
-                        <span className="badge bg-success text-dark ms-2">
-                          PRO
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="" className="dropdown-item">
-                        Styles
-                        <span className="badge bg-success text-dark ms-2">
-                          PRO
-                        </span>
-                      </a>
-                    </li>
+                      {token ?
+                        <a href="/profile" className="dropdown-item">
+                          Account
+                        </a>
+                        :
+                        <a href="/account" className="dropdown-item">
+                          Account
+                        </a>
+                      }</li>
                   </ul>
                 </li>
                 <li className="nav-item">
@@ -341,27 +336,13 @@ const Navbar: React.FC = () => {
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a href="" className="nav-link">
-                    Blog
+                  <a href="/about" className="nav-link">
+                    About
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a href="" className="nav-link">
+                  <a href="/contact" className="nav-link">
                     Contact
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="" className="nav-link">
-                    Others
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a
-                    href="https://templatesjungle.gumroad.com/l/waggy-pet-shop-ecommerce-html-website-template"
-                    className="nav-link fw-bold text-dark"
-                    target="_blank"
-                  >
-                    GET PRO
                   </a>
                 </li>
               </ul>
@@ -377,10 +358,21 @@ const Navbar: React.FC = () => {
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
                       >
-                        <iconify-icon
-                          icon="healthicons:person"
-                          className="fs-4"
-                        ></iconify-icon>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 48 48"
+                        >
+                          <g fill="currentColor">
+                            <path d="M6 36c0-4.965 11.993-8 18-8c6.008 0 18 3.035 18 8v6H6z"></path>
+                            <path
+                              fill-rule="evenodd"
+                              d="M24 26c5.523 0 10-4.477 10-10S29.523 6 24 6s-10 4.477-10 10s4.477 10 10 10"
+                              clip-rule="evenodd"
+                            ></path>
+                          </g>
+                        </svg>
                       </a>
 
                       <ul
@@ -388,14 +380,18 @@ const Navbar: React.FC = () => {
                         aria-labelledby="person"
                       >
                         <li>
-                          <a className="dropdown-item" href="/account">
+                          <a className="dropdown-item" href="#">
                             Welcome , {username}
                           </a>
                         </li>
-
                         <li>
-                          <a className="dropdown-item" href="/account">
-                            Profile
+                          <a className="dropdown-item" href="/profile">
+                            My Account
+                          </a>
+                        </li>
+                        <li>
+                          <a className="dropdown-item" href="/orderHistory">
+                            Order history
                           </a>
                         </li>
 
@@ -413,22 +409,26 @@ const Navbar: React.FC = () => {
                       </ul>
                     </li>
                   ) : (
-                    <a href="/account" className="mx-3">
-                      <iconify-icon
-                        icon="healthicons:person"
-                        className="fs-4"
-                      ></iconify-icon>
-                    </a>
+                    <li className="nav-item mb-2">
+                      <a href="/account" className="mx-3">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 48 48"
+                        >
+                          <g fill="currentColor">
+                            <path d="M6 36c0-4.965 11.993-8 18-8c6.008 0 18 3.035 18 8v6H6z"></path>
+                            <path
+                              fill-rule="evenodd"
+                              d="M24 26c5.523 0 10-4.477 10-10S29.523 6 24 6s-10 4.477-10 10s4.477 10 10 10"
+                              clip-rule="evenodd"
+                            ></path>
+                          </g>
+                        </svg>
+                      </a>
+                    </li>
                   )}
-
-                  <li>
-                    <a href="" className="mx-3">
-                      <iconify-icon
-                        icon="mdi:heart"
-                        className="fs-4"
-                      ></iconify-icon>
-                    </a>
-                  </li>
 
                   <li>
                     <a
@@ -438,12 +438,19 @@ const Navbar: React.FC = () => {
                       data-bs-target="#offcanvasCart"
                       aria-controls="offcanvasCart"
                     >
-                      <iconify-icon
-                        icon="mdi:cart"
-                        className="fs-4 position-relative"
-                      ></iconify-icon>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M17 18c-1.11 0-2 .89-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2M1 2v2h2l3.6 7.59l-1.36 2.45c-.15.28-.24.61-.24.96a2 2 0 0 0 2 2h12v-2H7.42a.25.25 0 0 1-.25-.25q0-.075.03-.12L8.1 13h7.45c.75 0 1.41-.42 1.75-1.03l3.58-6.47c.07-.16.12-.33.12-.5a1 1 0 0 0-1-1H5.21l-.94-2M7 18c-1.11 0-2 .89-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2"
+                        ></path>
+                      </svg>
                       <span className="position-absolute translate-middle badge rounded-circle bg-primary pt-2">
-                        03
+                        {cats.length}
                       </span>
                     </a>
                   </li>
@@ -454,7 +461,10 @@ const Navbar: React.FC = () => {
         </nav>
       </div>
 
-      <Cart />
+      <Cart
+        cats={cats}
+        totalPrice={totalPrice}
+      />
     </header>
   );
 };

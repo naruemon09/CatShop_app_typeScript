@@ -21,12 +21,13 @@ const Login: React.FC = () => {
         'https://localhost:7092/api/Logins/LoginUser',
         user
       );
-      if (response.data.isSuceess === true && response.data.rolename === 'Client') {
+      console.log(response)
+      if (response.data.isSuceess === true) {
         setToken(response.data.token)
         setUsername(response.data.userName)
-        navigate('/')
+        navigate(-1)
       } else {
-        swal("Oops...", "Something went wrong!", "error");
+        swal("Oops...", response.data.userName, "error");
       }
     } catch (error) {
       console.log(error);

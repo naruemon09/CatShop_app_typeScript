@@ -6,7 +6,7 @@ const LayoutAdmin = () => {
   return (
     <div className="d-flex" style={{background: '#f2f3f4'}}>
         <SidebarAdmin/>
-        <Outlet/>
+        <Outlet/>  
     </div>
   )
 }

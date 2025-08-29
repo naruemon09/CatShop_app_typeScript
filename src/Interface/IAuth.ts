@@ -7,12 +7,13 @@ export interface IRegister {
   phone: string;
   address: string;
   provinceId: number;
-  disctricId: number;
-  subdisctricId: number;
-  zipcode: string;
+  districtId: number;
+  subdistrictId: number;
+  zipcode: number;
   password: string;
   gender: string;
-  RoleList: Array<IRole>
+  userStatus: string;
+  roleList: Array<IRole>
 }
 
 export interface ILogin {
@@ -21,15 +22,60 @@ export interface ILogin {
 }
 
 export interface IUser {
-  user: string;
+  userid: string;
+  username: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  birthdate: string;
+  phone: string;
+  address: string;
+  provinceId: number;
+  districtId: number;
+  subdistrictId: number;
+  zipcode: number;
+  password: string;
+  gender: string;
+  userStatus: string;
+  roleList: Array<IRole>
 }
 
 export interface IRole {
-  roleId :string
+  roleid :string
   rolename: string;
 }
 
 export interface IRolesMapping {
   username: string;
   roleList: IRole[];
+}
+
+export interface IAddressData {
+  houseNumber: string;
+  district: string;
+  subdistrict: string;
+  province: string;
+  zipcode: string;
+}
+
+export interface IProvince {
+  id: number;
+  nameInEnglish: string;
+}
+
+export interface IDistrict {
+  id: number;
+  nameInEnglish: string;
+  provinceId: number;
+}
+
+export interface ISubdistrict {
+  id: number;
+  nameInEnglish: string;
+  zipCode: number;
+  districtId?: number;
+}
+
+export interface IPage {
+  setPage?: React.Dispatch<React.SetStateAction<boolean>>;
 }

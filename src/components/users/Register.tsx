@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import type { IRegister, IRole } from "../../Interface/IAuth";
+import type { IDistrict, IPage, IProvince, IRegister, IRole, ISubdistrict } from "../../Interface/IAuth";
 
-const Register: React.FC = () => {
-  const navigate = useNavigate();
+const Register: React.FC <IPage> = ({ setPage }) => {
+
   const [form, setForm] = useState<IRegister>({
     username: "",
     firstname: "",
@@ -14,23 +13,24 @@ const Register: React.FC = () => {
     phone: "",
     address: "",
     provinceId: 0,
-    disctricId: 0,
-    subdisctricId: 0,
-    zipcode: "",
+    districtId: 0,
+    subdistrictId: 0,
+    zipcode: 0,
     password: "",
     gender: "",
-    RoleList: [],
+    userStatus: "",
+    roleList: [],
   });
 
   const [role, setRole] = useState<IRole[]>([]);
-  const [province, setProvince] = useState<string[]>([]);
-  const [distric, setDistric] = useState<string[]>([]);
-  const [subdistrict, setSubdistrict] = useState<string[]>([]);
+  const [province, setProvince] = useState<IProvince[]>([]);
+  const [distric, setDistric] = useState<IDistrict[]>([]);
+  const [subdistrict, setSubdistrict] = useState<ISubdistrict[]>([]);
 
   useEffect(() => {
     const getRole = async () => {
       try {
-        const response = await axios.get("https://localhost:7092/api/Roles");
+        const response = await axios.get<IRole[]>("https://localhost:7092/api/Roles");
         if (response.status === 200) {
           const clientRoles = response.data.filter(
             (r) => r.rolename === "Client"
@@ -56,24 +56,24 @@ const Register: React.FC = () => {
         ...form,
         RoleList: role,
       };
-      console.log(formData);
+      console.log("formData",formData);
       const response = await axios.post(
         "https://localhost:7092/api/Users/CreateUser",
         formData
       );
       console.log(response);
       if (response.data.isSuceess === true) {
-        navigate("/account");
+        setPage?.(false)
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const selectProvince = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const selectProvince = async (event: React.ChangeEvent<HTMLSelectElement>) => {
     const item = event.target.value;
     setForm({ ...form, provinceId: Number(item) });
-    const districs = await axios.get(
+    const districs = await axios.get<IDistrict[]>(
       "https://localhost:7092/api/Address/GetDistrict"
     );
     const findDistrics = districs.data.filter(
@@ -82,10 +82,10 @@ const Register: React.FC = () => {
     setDistric(findDistrics);
   };
 
-  const selectDistric = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const selectDistric = async (event: React.ChangeEvent<HTMLSelectElement>) => {
     const item = event.target.value;
-    setForm({ ...form, disctricId: Number(item)});
-    const subdistricts = await axios.get(
+    setForm({ ...form, districtId: Number(item)});
+    const subdistricts = await axios.get<ISubdistrict[]>(
       "https://localhost:7092/api/Address/GetSubdistrict"
     );
     const findSubdistrict = subdistricts.data.filter(
@@ -94,14 +94,12 @@ const Register: React.FC = () => {
     setSubdistrict(findSubdistrict);
   };
 
-  const selectSubdistrict = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const selectSubdistrict = async (event: React.ChangeEvent<HTMLSelectElement>) => {
     const item = event.target.value;
-    const findZipcode = subdistrict.find((r) => r.id === Number(item));
+    const findZipcode = subdistrict.find((r) => r.id === Number(item))!;
     setForm({
       ...form,
-      subdisctricId: findZipcode.id,
+      subdistrictId: findZipcode.id,
       zipcode: findZipcode.zipCode,
     });
   };
