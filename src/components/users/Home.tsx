@@ -12,19 +12,19 @@ const Home: React.FC = () => {
     "src/images/banner-img5.png",
   ];
 
-  const [cats, setCats] = useState([]);
+  const [cats, setCats] = useState<IGetCats[]>([]);
 
   useEffect(() => {
     const getCats = async () => {
       try {
-        const response = await axios.get("https://localhost:7092/api/Cats", {
+        const response = await axios.get<IGetCats[]>("https://localhost:7092/api/Cats", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         if (response.status === 200) {
           const sortedCats = response.data.sort(
-            (a, b) => new Date(b.addDateTime) - new Date(a.addDateTime)
+            (a, b) => new Date(b.addDateTime).getTime() - new Date(a.addDateTime).getTime()
           );
           setCats(sortedCats);
         }
@@ -49,17 +49,17 @@ const Home: React.FC = () => {
                     </div>
                     <div className="content-wrapper col-md-7 p-5 mb-5">
                       <div className="secondary-font text-primary text-uppercase mb-4">
-                        Save 10 - 20 % off
+                        ลดราคา 10–20% สำหรับแมวสุดโปรด
                       </div>
                       <h2 className="banner-title display-1 fw-normal">
-                        Best destination for{" "}
-                        <span className="text-primary">your pets</span>
+                        จุดหมายปลายทางสำหรับ
+                        <span className="text-primary">แมวสุดรัก</span>
                       </h2>
                       <a
-                        href="#"
+                        href="/ร้านค้า"
                         className="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1"
                       >
-                        shop now
+                        ร้านค้า
                         <svg
                           width="24"
                           height="24"
@@ -88,13 +88,13 @@ const Home: React.FC = () => {
       <section id="clothing" className="my-5 overflow-hidden">
         <div className="container pb-5">
           <div className="section-header d-md-flex justify-content-between align-items-center mb-3">
-            <h2 className="display-3 fw-normal">Pet Clothing</h2>
+            <h2 className="display-3 fw-normal">สัตว์เลี้ยง</h2>
             <div>
               <a
-                href="/shop"
+                href="/ร้านค้า"
                 className="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1"
               >
-                shop now
+                ร้านค้า
                 <svg
                   width="24"
                   height="24"
@@ -118,7 +118,7 @@ const Home: React.FC = () => {
               {cats.slice(0, 4).map((item, index) => (
                 <div key={index} className="col-md-3 my-4">
                   <div className="z-1 position-absolute rounded-3 m-2 px-3 border border-dark-subtle">
-                    New
+                    ใหม่
                   </div>
                   <CatCard item={item} />
                 </div>

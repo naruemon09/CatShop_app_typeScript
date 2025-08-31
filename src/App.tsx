@@ -48,24 +48,25 @@ function App() {
     <Router>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/" element={<Home />} />
-          <Route element={<LayoutBanner />}>
-            <Route path="/account" element={<LayoutLogin />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/shop" element={<Shop />} />
-            <Route path="/shop/detail" element={<CatDetail />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/checkout/billing" element={<Billing />} />
-            <Route path="/payment" element={<Payment />} />
-            <Route path="/orderHistory" element={<Orderlist />} />
-            <Route path="/orderHistory/detail" element={<OrderDetail />} />
-            <Route path="/cancel" element={<Cancel />} />
-          </Route>
+        <Route path="/เข้าสู่ระบบ" element={<Login />} />
+        <Route path="/สมัครสมาชิก" element={<Register />} />
+        <Route path="/" element={<Home />} />
+
+        <Route element={<LayoutBanner />}>
+          <Route path="/บัญชีผู้ใช้" element={<LayoutLogin />} />
+          <Route path="/โปรไฟล์" element={<Profile />} />
+          <Route path="/ร้านค้า" element={<Shop />} />
+          <Route path="/ร้านค้า/รายละเอียด" element={<CatDetail />} />
+          <Route path="/เกี่ยวกับ" element={<About />} />
+          <Route path="/ติดต่อเรา" element={<Contact />} />
+          <Route path="/ชำระเงิน" element={<Checkout />} />
+          <Route path="/ชำระเงิน/ที่อยู่จัดส่ง" element={<Billing />} />
+          <Route path="/ชำระเงิน/การจ่าย" element={<Payment />} />
+          <Route path="/ประวัติการสั่งซื้อ" element={<Orderlist />} />
+          <Route path="/ประวัติการสั่งซื้อ/รายละเอียด" element={<OrderDetail />} />
+          <Route path="/ยกเลิก" element={<Cancel />} />
         </Route>
+      </Route>
 
         <Route path="/admin" element={<LoginAdmin />} />
         <Route element={<LayoutAdmin />}>

@@ -35,6 +35,7 @@ export interface IGetCats {
   catStatus: string;
   price:string;
   idnumber:string;
+  addDateTime:string;
 }
 
 export interface CartProps {

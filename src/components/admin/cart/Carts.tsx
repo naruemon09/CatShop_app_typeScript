@@ -21,7 +21,7 @@ const Carts: React.FC = () => {
         if (response.status === 200) {
           console.log(response);
           const filterCarts = response.data.filter(
-            (x) => x.orderStatus === "Pending"
+            (x) => x.orderStatus === "ยังไม่ชำระเงิน"
           );
           setCarts(filterCarts);
         }
@@ -38,19 +38,19 @@ const Carts: React.FC = () => {
       style={{ height: "100%", overflow: "hidden", overflowY: "auto" }}
     >
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2 className="fw-bold">Carts Management</h2>
+        <h2 className="fw-bold">การจัดการตะกร้าสินค้า</h2>
       </div>
       <div className="card bg-white p-4">
         <div className="table-responsive">
           <table className="table">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Cart ID</th>
-                <th>Username</th>
-                <th>Quantity</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th>#</th>
+                <th>รหัสตะกร้าสินค้า</th>
+                <th>ชื่อผู้ใช้</th>
+                <th>จำนวน</th>
+                <th>สถานะ</th>
+                <th>การจัดการ</th>
               </tr>
             </thead>
             {carts.map((item, index) => (
@@ -62,25 +62,25 @@ const Carts: React.FC = () => {
                   <td>{item.catsList.length}</td>
                   <td
                     className={`m-2 ${
-                      item.orderStatus === "Completed"
+                      item.orderStatus === "จัดส่งสำเร็จ"
                         ? "badge bg-success"
-                        : item.orderStatus === "Paid"
+                        : item.orderStatus === "ชำระเงินแล้ว"
                         ? "badge bg-info"
-                        : item.orderStatus === "Pending"
+                        : item.orderStatus === "ยังไม่ชำระเงิน"
                         ? "badge bg-warning"
-                        : item.orderStatus === "Canceled"
+                        : item.orderStatus === "ยกเลิกสำเร็จ"
                         ? "badge bg-danger"
                         : "badge bg-secondary"
                     }`}
                     style={{
                       color:
-                        item.orderStatus === "Completed"
+                        item.orderStatus === "จัดส่งสำเร็จ"
                           ? "#198754"
-                          : item.orderStatus === "Paid"
+                          : item.orderStatus === "ชำระเงินแล้ว"
                           ? "#0dcaf0"
-                          : item.orderStatus === "Pending"
+                          : item.orderStatus === "ยังไม่ชำระเงิน"
                           ? "#ffc107"
-                          : item.orderStatus === "Canceled"
+                          : item.orderStatus === "ยกเลิกสำเร็จ"
                           ? "#dc3545"
                           : "#6c757d",
                     }}
@@ -92,7 +92,7 @@ const Carts: React.FC = () => {
                       href={`/carts/${item.cartId}`}
                       className="btn btn-sm btn-success me-2"
                     >
-                      View
+                      ดูข้อมูล
                     </a>
                   </td>
                 </tr>

@@ -21,7 +21,7 @@ const AddCats: React.FC = () => {
   });
 
   const [breeds, setBreeds] = useState<IGetBreeds[]>([]);
-  const status = ["Avaliable","Adopted","Sick","Death"]
+  const status = ["ว่าง","ขายแล้ว","ป่วย","เสียชีวิต"]
 
   useEffect(() => {
     const getBreeds = async () => {
@@ -65,7 +65,7 @@ const AddCats: React.FC = () => {
           },
         });
       console.log(response);
-      if (response.data === "Create Success") {
+      if (response.status == 200) {
         navigate('/cats')
       }
     } catch (error) {
@@ -75,12 +75,12 @@ const AddCats: React.FC = () => {
 
   return (
     <div className="container-fluid p-4 vh-100" style={{ height: '100%', overflow: 'hidden' ,overflowY: 'auto'}}>
-      <h2 className="fw-bold">Add Cats</h2>
+      <h2 className="fw-bold">เพิ่มแมวใหม่</h2>
       <div className="card">
         <div className="card bg-white p-4">
           <div className="m-4">
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label">ID Number</label>
+              <label className="col-sm-2 col-form-label">รหัสแมว</label>
               <div className="col-sm-10">
                 <input
                   type="text"
@@ -94,7 +94,7 @@ const AddCats: React.FC = () => {
               </div>
             </div>
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label">Name</label>
+              <label className="col-sm-2 col-form-label">ชื่อ</label>
               <div className="col-sm-10">
                 <input
                   type="text"
@@ -108,7 +108,7 @@ const AddCats: React.FC = () => {
               </div>
             </div>
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label">Breed</label>
+              <label className="col-sm-2 col-form-label">สายพันธุ์</label>
               <div className="col-sm-10">
                 <select
                   className="form-control dropdown-toggle"
@@ -116,7 +116,7 @@ const AddCats: React.FC = () => {
                     setCats({ ...cats, breedid: e.target.value })
                   }
                 >
-                  <option className="dropdown-item">---Select Breed---</option>
+                  <option className="dropdown-item">---เลือก สายพันธุ์---</option>
 
                   {breeds.map((item, index) => (
                     <option
@@ -131,7 +131,7 @@ const AddCats: React.FC = () => {
               </div>
             </div>
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label">Description</label>
+              <label className="col-sm-2 col-form-label">รายละเอียด</label>
               <div className="col-sm-10">
                 <textarea
                   className="form-control"
@@ -144,7 +144,7 @@ const AddCats: React.FC = () => {
               </div>
             </div>
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label">Birthdate</label>
+              <label className="col-sm-2 col-form-label">วัน/เดือน/ปี เกิด</label>
               <div className="col-sm-10">
                 <input
                   type="date"
@@ -158,7 +158,7 @@ const AddCats: React.FC = () => {
               </div>
             </div>
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label">Gender</label>
+              <label className="col-sm-2 col-form-label">เพศ</label>
               <div className="col-sm-10">
                 <input
                   type="radio"
@@ -166,18 +166,18 @@ const AddCats: React.FC = () => {
                   checked={cats.gender === "0"}
                   onChange={(e) => setCats({ ...cats, gender: e.target.value })}
                 />
-                <label className="px-2">Male</label>
+                <label className="px-2">ชาย</label>
                 <input
                   type="radio"
                   value={"1"}
                   checked={cats.gender === "1"}
                   onChange={(e) => setCats({ ...cats, gender: e.target.value })}
                 />
-                <label className="px-2">Female</label>
+                <label className="px-2">หญิง</label>
               </div>
             </div>
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label">Size</label>
+              <label className="col-sm-2 col-form-label">ขนาด</label>
               <div className="col-sm-10">
                 <label className={`btn me-2
                   ${cats.size === 'S'
@@ -221,7 +221,7 @@ const AddCats: React.FC = () => {
               </div>
             </div>
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label">Image</label>
+              <label className="col-sm-2 col-form-label">รูปภาพ</label>
               <div className="col-sm-10">
                 <input
                   type="file"
@@ -231,7 +231,7 @@ const AddCats: React.FC = () => {
               </div>
             </div>
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label">Price</label>
+              <label className="col-sm-2 col-form-label">ราคา</label>
               <div className="col-sm-10">
                 <input
                   type="number"
@@ -243,7 +243,7 @@ const AddCats: React.FC = () => {
               </div>
             </div>
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label">Status</label>
+              <label className="col-sm-2 col-form-label">สถานะ</label>
               <div className="col-sm-10">
                 <select
                   className="form-control dropdown-toggle"
@@ -251,7 +251,7 @@ const AddCats: React.FC = () => {
                     setCats({ ...cats, catStatus: e.target.value })
                   }
                 >
-                  <option className="dropdown-item">---Select Status---</option>
+                  <option className="dropdown-item">---เลือก สถานะ---</option>
 
                   {status.map((item) => (
                     <option
@@ -274,10 +274,10 @@ const AddCats: React.FC = () => {
                     onSubmit();
                   }}
                 >
-                  Save
+                  บันทึก
                 </button>
                 <a href="/cats" className="btn btn-danger">
-                  Cancle
+                  ยกเลิก
                 </a>
               </div>
             </div>

@@ -32,21 +32,21 @@ const User: React.FC = () => {
   return (
     <div className="container-fluid p-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2 className="fw-bold">Users Management</h2>
+        <h2 className="fw-bold">การจัดการลูกค้า</h2>
       </div>
       <div className="card bg-white p-4">
         <div className="table-responsive">
           <table className="table">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Username</th>
-                <th>Name</th>
-                <th>Gender</th>
-                <th>Email</th>
-                <th>Address</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th>#</th>
+                <th>ชื่อผู้ใช้</th>
+                <th>ชื่อ - นามสกุล</th>
+                <th>เพศ</th>
+                <th>อีเมล</th>
+                <th>ที่อยู่</th>
+                <th>สถานะ</th>
+                <th>การจัดการ</th>
               </tr>
             </thead>
             {user.map((item, index) => (
@@ -64,11 +64,11 @@ const User: React.FC = () => {
                     <span
                       className={`badge ms-2
                     ${
-                      item.userStatus === "Active" ? "bg-success " : "bg-danger"
+                      item.userStatus === "ใช้งานอยู่" ? "bg-success " : "bg-danger"
                     }`}
                       style={{
                         color:
-                          item.userStatus === "Active" ? "#198754" : "#dc3545",
+                          item.userStatus === "ใช้งานอยู่" ? "#198754" : "#dc3545",
                       }}
                     >
                       {item.userStatus}
@@ -79,7 +79,7 @@ const User: React.FC = () => {
                       href={`/users/${item.userid}`}
                       className="btn btn-sm btn-success me-2"
                     >
-                      View
+                      ดูข้อมูล
                     </a>
                   </td>
                 </tr>

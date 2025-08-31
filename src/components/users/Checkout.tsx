@@ -23,7 +23,7 @@ const Checkout: React.FC = () => {
         );
         if (responseCat.status === 200) {
           const filterOrder = responseCat.data.filter(
-            (x) => x.orderStatus === "Pending"
+            (x) => x.orderStatus === "ยังไม่ชำระเงิน"
           );
           setOrders(filterOrder);
           console.log(filterOrder);
@@ -35,11 +35,11 @@ const Checkout: React.FC = () => {
     getOrder();
   }, [orders]);
 
-  const handleDelete = async (orderId: string) => {
+  const handleDelete = async (orderid: string) => {
     try {
-      console.log(orderId)
+      console.log(orderid)
       const response = await axios.delete(
-        `https://localhost:7092/api/Orders/DeleteOrderById/${orderId}`,
+        `https://localhost:7092/api/Orders/DeleteOrderById/${orderid}`,
         {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -61,13 +61,13 @@ const Checkout: React.FC = () => {
               <thead>
                 <tr>
                   <th scope="col" className="card-title text-uppercase">
-                    Product
+                    สัตว์เลี้ยง
                   </th>
                   <th scope="col" className="card-title text-uppercase">
-                    Breed
+                    สายพันธ์ุ
                   </th>
                   <th scope="col" className="card-title text-uppercase">
-                    Subtotal
+                    ราคา
                   </th>
                   <th scope="col" className="card-title text-uppercase"></th>
                 </tr>
@@ -88,7 +88,7 @@ const Checkout: React.FC = () => {
                         <div className="card-detail ps-3">
                           <h5 className="card-title">
                             <a className="text-decoration-none">
-                              {item.catname}
+                              {item.catName}
                             </a>
                           </h5>
                         </div>
@@ -116,7 +116,7 @@ const Checkout: React.FC = () => {
                     </td>
                     <td className="py-4 align-middle">
                       <div className="cart-remove">
-                        <button className="border-0 btn" onClick={() => handleDelete(item.orderId)}>
+                        <button className="border-0 btn" onClick={() => handleDelete(item.orderid)}>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -138,12 +138,12 @@ const Checkout: React.FC = () => {
           </div>
           <div className="col-md-4">
             <div className="cart-totals">
-              <h2 className="pb-4">Cart Total</h2>
+              <h2 className="pb-4">ยอดรวมในรถเข็น</h2>
               <div className="total-price pb-4">
                 <table className="table text-uppercase">
                   <tbody>
                     <tr className="order-total pt-2 pb-2 border-bottom">
-                      <th>Total</th>
+                      <th>ยอดรวม</th>
                       <td data-title="Total">
                         <span className="price-amount amount text-dark ps-5">
                           <bdi>
@@ -151,7 +151,7 @@ const Checkout: React.FC = () => {
                               value={totalPrice}
                               displayType={"text"}
                               thousandSeparator={true}
-                              prefix={"THB "}
+                              prefix={"฿ "}
                               decimalScale={2}
                               fixedDecimalScale={true}
                             />
@@ -164,16 +164,16 @@ const Checkout: React.FC = () => {
               </div>
               <div className="button-wrap row g-2">
                 <a
-                  href="/shop"
+                  href="/ร้านค้า"
                   className="btn btn-dark btn-lg rounded-1 p-3 w-100"
                 >
-                  Continue To Shop
+                  ไปที่ร้านค้า
                 </a>
                 <a
-                  href="/checkout/billing"
+                  href="/ชำระเงิน/ที่อยู่จัดส่ง"
                   className="btn btn-primary p-3 text-uppercase rounded-1 w-100"
                 >
-                  Proceed to checkout
+                  ดำเนินการชำระเงิน
                 </a>
               </div>
             </div>

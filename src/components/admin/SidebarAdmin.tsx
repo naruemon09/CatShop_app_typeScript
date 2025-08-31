@@ -98,7 +98,7 @@ const SidebarAdmin: React.FC = () => {
                   />
                 </svg>
                 {!isCollapsed && (
-                  <span className="flex-grow-1 px-3">Dashboard</span>
+                  <span className="flex-grow-1 px-3">แผงควบคุม</span>
                 )}
               </a>
             </li>
@@ -124,14 +124,14 @@ const SidebarAdmin: React.FC = () => {
                   />
                 </svg>
                 {!isCollapsed && (
-                  <span className="flex-grow-1 px-3">Calendar</span>
+                  <span className="flex-grow-1 px-3">ปฏิทิน</span>
                 )}
               </a>
             </li>
 
             <li className="nav-item m-2">
               {!isCollapsed ? (
-                <h5 className="flex-grow-1 px-3 fw-bold">Auth</h5>
+                <h5 className="flex-grow-1 px-3 fw-bold">จัดการสิทธิ์</h5>
               ) : (
                 <hr />
               )}
@@ -162,7 +162,7 @@ const SidebarAdmin: React.FC = () => {
                 </svg>
 
                 {!isCollapsed && (
-                  <span className="flex-grow-1 px-3">Admin</span>
+                  <span className="flex-grow-1 px-3">พนักงาน</span>
                 )}
               </a>
             </li>
@@ -187,14 +187,14 @@ const SidebarAdmin: React.FC = () => {
                   />
                 </svg>
                 {!isCollapsed && (
-                  <span className="flex-grow-1 px-3">Users</span>
+                  <span className="flex-grow-1 px-3">ลูกค้า</span>
                 )}
               </a>
             </li>
 
             <li className="nav-item m-2">
               {!isCollapsed ? (
-                <h5 className="flex-grow-1 px-3 fw-bold">Management</h5>
+                <h5 className="flex-grow-1 px-3 fw-bold">การจัดการ</h5>
               ) : (
                 <hr />
               )}
@@ -223,7 +223,7 @@ const SidebarAdmin: React.FC = () => {
                     d="m12 8l-1.33.09C9.81 7.07 7.4 4.5 5 4.5c0 0-1.97 2.96-.04 6.91c-.55.83-.89 1.26-.96 2.25l-1.93.29l.21.98l1.76-.26l.14.71l-1.57.94l.47.89l1.45-.89C5.68 18.76 8.59 20 12 20s6.32-1.24 7.47-3.68l1.45.89l.47-.89l-1.57-.94l.14-.71l1.76.26l.21-.98l-1.93-.29c-.07-.99-.41-1.42-.96-2.25C20.97 7.46 19 4.5 19 4.5c-2.4 0-4.81 2.57-5.67 3.59zm-3 3a1 1 0 0 1 1 1a1 1 0 0 1-1 1a1 1 0 0 1-1-1a1 1 0 0 1 1-1m6 0a1 1 0 0 1 1 1a1 1 0 0 1-1 1a1 1 0 0 1-1-1a1 1 0 0 1 1-1m-4 3h2l-.7 1.39c.2.64.76 1.11 1.45 1.11a1.5 1.5 0 0 0 1.5-1.5h.5a2 2 0 0 1-2 2c-.75 0-1.4-.41-1.75-1c-.35.59-1 1-1.75 1a2 2 0 0 1-2-2h.5a1.5 1.5 0 0 0 1.5 1.5c.69 0 1.25-.47 1.45-1.11z"
                   />
                 </svg>
-                {!isCollapsed && <span className="flex-grow-1 px-3">Cats</span>}
+                {!isCollapsed && <span className="flex-grow-1 px-3">แมว</span>}
               </a>
             </li>
 
@@ -251,7 +251,7 @@ const SidebarAdmin: React.FC = () => {
                   />
                 </svg>
                 {!isCollapsed && (
-                  <span className="flex-grow-1 px-3">Breeds</span>
+                  <span className="flex-grow-1 px-3">สายพันธุ์</span>
                 )}
               </a>
             </li>
@@ -278,7 +278,7 @@ const SidebarAdmin: React.FC = () => {
                   />
                 </svg>
                 {!isCollapsed && (
-                  <span className="flex-grow-1 px-3">Orders</span>
+                  <span className="flex-grow-1 px-3">คำสั่งซื้อ</span>
                 )}
               </a>
             </li>
@@ -302,7 +302,7 @@ const SidebarAdmin: React.FC = () => {
                     d="M7 22q-.825 0-1.412-.587T5 20t.588-1.412T7 18t1.413.588T9 20t-.587 1.413T7 22m10 0q-.825 0-1.412-.587T15 20t.588-1.412T17 18t1.413.588T19 20t-.587 1.413T17 22M5.2 4h14.75q.575 0 .875.513t.025 1.037l-3.55 6.4q-.275.5-.737.775T15.55 13H8.1L7 15h12v2H7q-1.125 0-1.7-.987t-.05-1.963L6.6 11.6L3 4H1V2h3.25z"
                   />
                 </svg>
-                {!isCollapsed && <span className="flex-grow-1 px-3">Cart</span>}
+                {!isCollapsed && <span className="flex-grow-1 px-3">ตะกร้าสินค้า</span>}
               </a>
             </li>
           </ul>
@@ -342,17 +342,17 @@ const SidebarAdmin: React.FC = () => {
             >
               <li>
                 <a className="dropdown-item" href="#">
-                  Action
+                  สวัสดี , {username}
                 </a>
               </li>
               <li>
                 <a className="dropdown-item" href="#">
-                  Another action
+                  บัญชีของฉัน
                 </a>
               </li>
               <li>
                 <a className="dropdown-item" href="#">
-                  Something else here
+                  แก้ไขข้อมูลบัญชี
                 </a>
               </li>
               <div className="dropdown-divider"></div>
@@ -363,7 +363,7 @@ const SidebarAdmin: React.FC = () => {
                     handleLogout();
                   }}
                 >
-                  Logout
+                  ออกจากระบบ
                 </button>
               </li>
             </ul>

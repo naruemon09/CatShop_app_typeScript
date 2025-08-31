@@ -86,7 +86,7 @@ const CreditCard: React.FC  = ({ setValid }) => {
     <div className="container p-4">
       <div className="row">
         <div className="col-12 mb-3">
-          <label className="form-label">Card Number</label>
+          <label className="form-label">หมายเลขบัตร</label>
           <div className="position-relative">
             <input
               type="text"
@@ -113,7 +113,7 @@ const CreditCard: React.FC  = ({ setValid }) => {
           </div>
           {cardType && (
             <div className="form-text">
-              ✅ The card is valid. {getCardBrandName(cardType)}
+              ✅ บัตรนี้ใช้ได้ {getCardBrandName(cardType)}
             </div>
           )}
         </div>
@@ -121,7 +121,7 @@ const CreditCard: React.FC  = ({ setValid }) => {
 
       <div className="row">
         <div className="col-12 mb-3">
-          <label className="form-label">Cardholder Name</label>
+          <label className="form-label">ชื่อผู้ถือบัตร</label>
           <input
             type="text"
             className="form-control"
@@ -137,7 +137,7 @@ const CreditCard: React.FC  = ({ setValid }) => {
 
       <div className="row">
         <div className="col-md-6 ">
-          <label className="form-label">Expiry Date</label>
+          <label className="form-label">วันหมดอายุ</label>
           <input
             type="text"
             className="form-control"
@@ -149,7 +149,7 @@ const CreditCard: React.FC  = ({ setValid }) => {
           />
         </div>
         <div className="col-md-6">
-          <label className="form-label">CVV</label>
+          <label className="form-label">CVV / CVC</label>
           <input
             type="text"
             className="form-control"

@@ -65,12 +65,12 @@ const CatsDetail: React.FC = () => {
       className="container-fluid p-4 vh-100"
       style={{ height: "100%", overflow: "hidden", overflowY: "auto" }}
     >
-      <h2 className="fw-bold">Cat Detail</h2>
+      <h2 className="fw-bold">รายละเอียดสัตว์เลี้ยง</h2>
       <div className="card">
         <div className="card bg-white p-4">
           <div className="m-4">
             <div className="element-header">
-              <h2 className="display-6 fw-bold">Chip ID : {cats.idnumber}</h2>
+              <h2 className="display-6 fw-bold">รหัสแมว : {cats.idnumber}</h2>
             </div>
             <div className="row g-md-5">
               <div className="col-lg-6">
@@ -105,7 +105,7 @@ const CatsDetail: React.FC = () => {
                   <div className="meta-product pt-4">
                     <div className="meta-item d-flex align-items-baseline">
                       <h6 className="item-title fw-bold no-margin pe-2">
-                        Breed :
+                        สายพันธุ์ :
                       </h6>
                       <ul className="select-list list-unstyled d-flex">
                         <li className="select-item">{cats.breedname}</li>
@@ -113,17 +113,17 @@ const CatsDetail: React.FC = () => {
                     </div>
                     <div className="meta-item d-flex align-items-baseline">
                       <h6 className="item-title fw-bold no-margin pe-2">
-                        Gender :
+                        เพศ :
                       </h6>
                       <ul className="select-list list-unstyled d-flex">
                         <li className="select-item">
-                          {cats.gender === "0" ? "Male" : "Female"}
+                          {cats.gender === "0" ? "ชาย" : "หญิง"}
                         </li>
                       </ul>
                     </div>
                     <div className="meta-item d-flex align-items-baseline">
                       <h6 className="item-title fw-bold no-margin pe-2">
-                        Birthdate :
+                        วัน/เดือน/ปี เกิด :
                       </h6>
                       <ul className="select-list list-unstyled d-flex">
                         <li className="select-item">{cats.birthdate}</li>
@@ -131,18 +131,18 @@ const CatsDetail: React.FC = () => {
                     </div>
                     <div className="meta-item d-flex align-items-baseline">
                       <h6 className="item-title fw-bold no-margin pe-2">
-                        Age :
+                        อายุ :
                       </h6>
                       <ul className="select-list list-unstyled d-flex">
                         <li className="select-item">
                           {calculateAge(cats.birthdate).years === 0 ? (
                             <h6 className="select-item">
-                              {calculateAge(cats.birthdate).months} months
+                              {calculateAge(cats.birthdate).months} เดือน
                             </h6>
                           ) : (
                             <h6 className="select-item">
-                              {calculateAge(cats.birthdate).years} years /{" "}
-                              {calculateAge(cats.birthdate).months} months
+                              {calculateAge(cats.birthdate).years} ปี /{" "}
+                              {calculateAge(cats.birthdate).months} เดือน
                             </h6>
                           )}
                         </li>
@@ -150,7 +150,7 @@ const CatsDetail: React.FC = () => {
                     </div>
                     <div className="meta-item d-flex align-items-baseline">
                       <h6 className="item-title fw-bold no-margin pe-2">
-                        Size :
+                        ขนาด :
                       </h6>
                       <ul className="select-list list-unstyled d-flex">
                         <li className="select-item">{cats.size}</li>
@@ -158,30 +158,30 @@ const CatsDetail: React.FC = () => {
                     </div>
                     <div className="meta-item d-flex align-items-baseline">
                       <h6 className="item-title fw-bold no-margin pe-2">
-                        Status :
+                        สถานะ :
                       </h6>
                       <ul className="select-list list-unstyled d-flex">
                         <li
                           className={`m-2 ${
-                            cats.catStatus === "Avaliable"
+                            cats.catStatus === "ว่าง"
                               ? "badge bg-success"
-                              : cats.catStatus === "Adopted"
-                              ? "badge bg-primary"
-                              : cats.catStatus === "Sick"
+                              : cats.catStatus === "ขายแล้ว"
+                              ? "badge bg-info"
+                              : cats.catStatus === "ป่วย"
                               ? "badge bg-warning"
-                              : cats.catStatus === "Death"
+                              : cats.catStatus === "เสียชีวิต"
                               ? "badge bg-danger"
                               : "badge bg-secondary"
                           }`}
                           style={{
                             color:
-                              cats.catStatus === "Avaliable"
+                              cats.catStatus === "ว่าง"
                                 ? "#198754"
-                                : cats.catStatus === "Adopted"
+                                : cats.catStatus === "ขายแล้ว"
                                 ? "#0dcaf0"
-                                : cats.catStatus === "Sick"
+                                : cats.catStatus === "ป่วย"
                                 ? "#ffc107"
-                                : cats.catStatus === "Death"
+                                : cats.catStatus === "เสียชีวิต"
                                 ? "#dc3545"
                                 : "#6c757d",
                           }}

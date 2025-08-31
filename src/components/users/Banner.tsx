@@ -6,14 +6,14 @@ const Banner: React.FC = () => {
 
   const pathSegments = location.pathname
     .split("/")
-    .filter(Boolean); 
+    .filter(Boolean);
 
   const buildBreadcrumbs = () => {
     const breadcrumbs = [];
 
     breadcrumbs.push(
-      <Link key="home" className="breadcrumb-item nav-link" to="/">
-        Home
+      <Link key="หน้าหลัก" className="breadcrumb-item nav-link" to="/">
+        หน้าหลัก
       </Link>
     );
 
@@ -24,13 +24,13 @@ const Banner: React.FC = () => {
       if (isLast) {
         breadcrumbs.push(
           <span key={path} className="breadcrumb-item active" aria-current="page">
-            {decodeURIComponent(segment.charAt(0).toUpperCase() + segment.slice(1))}
+            {decodeURIComponent(segment)}
           </span>
         );
       } else {
         breadcrumbs.push(
           <Link key={path} className="breadcrumb-item nav-link" to={path}>
-            {decodeURIComponent(segment.charAt(0).toUpperCase() + segment.slice(1))}
+            {decodeURIComponent(segment)}
           </Link>
         );
       }
@@ -46,9 +46,7 @@ const Banner: React.FC = () => {
           <h2 className="display-1 mt-3 mb-0">
             {pathSegments.length > 0
               ? decodeURIComponent(pathSegments[pathSegments.length - 1])
-                  .charAt(0)
-                  .toUpperCase() + pathSegments[pathSegments.length - 1].slice(1)
-              : "Home"}
+              : "หน้าหลัก"}
           </h2>
           <nav className="breadcrumb">{buildBreadcrumbs()}</nav>
         </div>

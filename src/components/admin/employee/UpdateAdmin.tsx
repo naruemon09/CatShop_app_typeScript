@@ -12,17 +12,25 @@ const UpdateAdmin = () => {
   const [province, setProvince] = useState<IProvince[]>([]);
   const [distric, setDistric] = useState<IDistrict[]>([]);
   const [subdistrict, setSubdistrict] = useState<ISubdistrict[]>([]);
+  const today = new Date();
+  const minAgeDate = new Date(
+    today.getFullYear() - 18,
+    today.getMonth(),
+    today.getDate()
+  )
+    .toISOString()
+    .split("T")[0];
   const [form, setForm] = useState<IRegister>({
     username: "",
     firstname: "",
     lastname: "",
     email: "",
-    birthdate: "",
+    birthdate: minAgeDate,
     phone: "",
     address: "",
     provinceId: 0,
-    disctricId: 0,
-    subdisctricId: 0,
+    districtId: 0,
+    subdistrictId: 0,
     zipcode: 0,
     password: "",
     gender: "",
@@ -57,12 +65,43 @@ const UpdateAdmin = () => {
         if (provinces.status === 200) {
           setProvince(provinces.data);
         }
+        const districtsResp = await axios.get<IDistrict[]>(
+          "https://localhost:7092/api/Address/GetDistrict"
+        );
+        const filteredDistricts = districtsResp.data.filter(
+          (d) => d.provinceId === responseUser.data.provinceId
+        );
+        console.log(filteredDistricts);
+        setDistric(filteredDistricts);
+
+        const subdistrictsResp = await axios.get<ISubdistrict[]>(
+          "https://localhost:7092/api/Address/GetSubdistrict"
+        );
+        const filteredSubdistricts = subdistrictsResp.data.filter(
+          (s) => s.districtId === responseUser.data.districtId
+        );
+        setSubdistrict(filteredSubdistricts);
       } catch (error) {
         console.log(error);
       }
     };
     getUsers();
   }, []);
+
+  const isPhoneValid = /^0[0-9]{9}$/.test(form.phone);
+  const isEmailValid = /^[\w.+-]+@gmail\.com$/.test(form.email);
+  const isBirthdateValid = (() => {
+    if (!form.birthdate) return true;
+    const birth = new Date(form.birthdate);
+    const today = new Date();
+    const age =
+      today.getFullYear() -
+      birth.getFullYear() -
+      (today < new Date(today.getFullYear(), birth.getMonth(), birth.getDate())
+        ? 1
+        : 0);
+    return age >= 18;
+  })();
 
   const onSubmit = async () => {
     try {
@@ -71,8 +110,8 @@ const UpdateAdmin = () => {
         RoleList: selectedRoles,
       };
       console.log("user", formData);
-      const response = await axios.post(
-        "https://localhost:7092/api/Users/CreateUser",
+      const response = await axios.put(
+        `https://localhost:7092/api/Users/UpdateUserDetail`,
         formData,
         {
           headers: {
@@ -81,7 +120,7 @@ const UpdateAdmin = () => {
         }
       );
       console.log(response);
-      if (response.data === "Create Success") {
+      if (response.status === 200) {
         navigate("/userAdmin");
       }
     } catch (error) {
@@ -116,7 +155,7 @@ const UpdateAdmin = () => {
 
   const selectDistric = async (event: React.ChangeEvent<HTMLSelectElement>) => {
     const item = event.target.value;
-    setForm({ ...form, disctricId: Number(item) });
+    setForm({ ...form, districtId: Number(item) });
     const subdistricts = await axios.get<ISubdistrict[]>(
       "https://localhost:7092/api/Address/GetSubdistrict"
     );
@@ -133,7 +172,7 @@ const UpdateAdmin = () => {
     const findZipcode = subdistrict.find((r) => r.id === Number(item));
     setForm({
       ...form,
-      subdisctricId: findZipcode.id,
+      subdistrictId: findZipcode.id,
       zipcode: findZipcode.zipCode,
     });
   };
@@ -143,69 +182,76 @@ const UpdateAdmin = () => {
       className="container-fluid p-4 vh-100"
       style={{ height: "100%", overflow: "hidden", overflowY: "auto" }}
     >
-      <h2 className="fw-bold">Admin Detail</h2>
+      <h2 className="fw-bold">แก้ไขข้อมูลพนักงาน</h2>
       <div className="card">
         <div className="card bg-white p-4">
           <div className="m-4">
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label">Username</label>
+              <label className="col-sm-2 col-form-label">ชื่อผู้ใช้</label>
               <div className="col-sm-10">
                 <input
                   type="text"
-                  className="form-control form-control-lg"
+                  className="form-control"
                   value={form.username}
                   onChange={(e) =>
                     setForm({ ...form, username: e.target.value })
                   }
-                  placeholder="Enter Your Username"
+                  placeholder="กรอก ชื่อผู้ใช้"
                 />
               </div>
             </div>
 
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label">Name</label>
+              <label className="col-sm-2 col-form-label">ชื่อ</label>
               <div className="col-md-5 mb-3">
                 <input
                   type="text"
-                  className="form-control form-control-lg"
+                  className="form-control"
                   value={form.firstname}
                   onChange={(e) =>
                     setForm({ ...form, firstname: e.target.value })
                   }
-                  placeholder="Enter Your Firstname"
+                  placeholder="กรอก ชื่อ"
                 />
               </div>
 
               <div className="col-md-5 mb-3">
                 <input
                   type="text"
-                  className="form-control form-control-lg"
+                  className="form-control"
                   value={form.lastname}
                   onChange={(e) =>
                     setForm({ ...form, lastname: e.target.value })
                   }
-                  placeholder="Enter Your Lastname"
+                  placeholder="กรอก นามสกุล"
                 />
               </div>
             </div>
 
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label">Birthdate</label>
+              <label className="col-sm-2 col-form-label">
+                วัน / เดือน / ปี เกิด
+              </label>
               <div className="col-md-10 mb-3">
                 <input
                   type="date"
-                  className="form-control form-control-lg"
+                  className="form-control"
                   value={form.birthdate}
                   onChange={(e) =>
                     setForm({ ...form, birthdate: e.target.value })
                   }
-                  placeholder="birthdate"
+                  placeholder="วัน/เดือน/ปี เกิด"
                 />
+                {!isBirthdateValid && form.birthdate && (
+                  <small style={{ color: "#dc3545" }}>
+                    ผู้สมัครต้องมีอายุอย่างน้อย 18 ปี
+                  </small>
+                )}
               </div>
             </div>
 
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label">Gender</label>
+              <label className="col-sm-2 col-form-label">เพศ</label>
               <div className="col-md-10 mb-3">
                 <input
                   type="radio"
@@ -213,7 +259,7 @@ const UpdateAdmin = () => {
                   checked={form.gender === "0"}
                   onChange={(e) => setForm({ ...form, gender: e.target.value })}
                 />
-                <label className="px-2">Male</label>
+                <label className="px-2">ชาย</label>
 
                 <input
                   type="radio"
@@ -221,46 +267,56 @@ const UpdateAdmin = () => {
                   checked={form.gender === "1"}
                   onChange={(e) => setForm({ ...form, gender: e.target.value })}
                 />
-                <label className="px-2">Female</label>
+                <label className="px-2">หญิง</label>
               </div>
             </div>
 
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label">Email</label>
+              <label className="col-sm-2 col-form-label">อีเมล</label>
               <div className="col-md-10 mb-3">
                 <input
                   type="email"
-                  className="form-control form-control-lg"
+                  className="form-control"
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  placeholder="Enter Your Email Address"
+                  placeholder="กรอก อีเมล"
                 />
+                {!isEmailValid && form.email && (
+                  <small style={{ color: "#dc3545" }}>
+                    ต้องเป็นอีเมล Gmail เท่านั้น
+                  </small>
+                )}
               </div>
             </div>
 
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label">Phone</label>
+              <label className="col-sm-2 col-form-label">โทรศัพท์</label>
               <div className="col-md-10 mb-3">
                 <input
                   type="tel"
-                  className="form-control form-control-lg"
+                  className="form-control"
                   value={form.phone}
                   onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                  placeholder="Enter Your Phone"
+                  placeholder="กรอก หมายเลขโทรศัพท์"
                 />
+                {!isPhoneValid && form.phone && (
+                  <small style={{ color: "#dc3545" }}>
+                    หมายเลขโทรศัพท์ต้องขึ้นต้นด้วย 0 และมี 10 หลัก
+                  </small>
+                )}
               </div>
             </div>
 
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label">Address</label>
+              <label className="col-sm-2 col-form-label">ที่อยู่</label>
               <div className="col-md-10 mb-3">
                 <textarea
-                  className="form-control form-control-lg"
+                  className="form-control"
                   value={form.address}
                   onChange={(e) =>
                     setForm({ ...form, address: e.target.value })
                   }
-                  placeholder="Enter Your Address"
+                  placeholder="กรอก บ้านเลขที่,ซอย,หมู่,ถนน"
                 />
               </div>
             </div>
@@ -268,9 +324,10 @@ const UpdateAdmin = () => {
               <div className="col offset-md-2 mb-3">
                 <select
                   className="form-control dropdown-toggle"
+                  value={form.provinceId}
                   onChange={(e) => selectProvince(e)}
                 >
-                  <option className="dropdown-item">Select Province</option>
+                  <option className="dropdown-item">เลือก จังหวัด</option>
 
                   {province.map((item, index) => (
                     <option
@@ -278,7 +335,7 @@ const UpdateAdmin = () => {
                       className="dropdown-item"
                       value={item.id}
                     >
-                      {item.nameInEnglish}
+                      {item.nameInThai}
                     </option>
                   ))}
                 </select>
@@ -286,9 +343,10 @@ const UpdateAdmin = () => {
               <div className="col mb-3">
                 <select
                   className="form-control dropdown-toggle"
+                  value={form.districtId}
                   onChange={(e) => selectDistric(e)}
                 >
-                  <option className="dropdown-item">Select Distric</option>
+                  <option className="dropdown-item">เลือก เขต/อำเภอ</option>
 
                   {distric.map((item, index) => (
                     <option
@@ -296,7 +354,7 @@ const UpdateAdmin = () => {
                       className="dropdown-item"
                       value={item.id}
                     >
-                      {item.nameInEnglish}
+                      {item.nameInThai}
                     </option>
                   ))}
                 </select>
@@ -304,16 +362,17 @@ const UpdateAdmin = () => {
               <div className="col mb-3">
                 <select
                   className="form-control dropdown-toggle"
+                  value={form.subdistrictId}
                   onChange={(e) => selectSubdistrict(e)}
                 >
-                  <option className="dropdown-item">Select Subdistrict</option>
+                  <option className="dropdown-item">เลือก แขวง/ตำบล</option>
                   {subdistrict.map((item, index) => (
                     <option
                       key={index}
                       className="dropdown-item"
                       value={item.id}
                     >
-                      {item.nameInEnglish}
+                      {item.nameInThai}
                     </option>
                   ))}
                 </select>
@@ -324,22 +383,21 @@ const UpdateAdmin = () => {
                   className="form-control"
                   value={form.zipcode}
                   readOnly
-                  placeholder="Zipcode"
+                  placeholder="รหัสไปรษณีย์"
                 />
               </div>
             </div>
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label">Position</label>
+              <label className="col-sm-2 col-form-label">ตำแหน่งงาน</label>
               <div className="col-md-6 mb-3">
                 <div className="dropdown">
                   <select
                     className="form-control dropdown-toggle"
                     style={{ width: "auto" }}
-                    value={form.roleid}
                     onChange={(e) => addRole(e)}
                   >
                     <option className="dropdown-item">
-                      ---Select Position---
+                      ---เลือกตำแหน่งงาน---
                     </option>
 
                     {role.map((item, index) => (
@@ -384,10 +442,10 @@ const UpdateAdmin = () => {
                     onSubmit();
                   }}
                 >
-                  Save
+                  บันทึก
                 </button>
                 <a href="/userAdmin" className="btn btn-danger">
-                  Cancle
+                  ยกเลิก
                 </a>
               </div>
             </div>

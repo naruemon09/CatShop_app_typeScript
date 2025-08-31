@@ -23,7 +23,7 @@ export interface ILogin {
 
 export interface IUser {
   userid: string;
-  username: string;
+  userName: string;
   firstname: string;
   lastname: string;
   email: string;
@@ -60,18 +60,18 @@ export interface IAddressData {
 
 export interface IProvince {
   id: number;
-  nameInEnglish: string;
+  nameInThai: string;
 }
 
 export interface IDistrict {
   id: number;
-  nameInEnglish: string;
+  nameInThai: string;
   provinceId: number;
 }
 
 export interface ISubdistrict {
   id: number;
-  nameInEnglish: string;
+  nameInThai: string;
   zipCode: number;
   districtId?: number;
 }

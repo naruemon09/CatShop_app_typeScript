@@ -36,12 +36,12 @@ const AddBreeds: React.FC = () => {
 
   return (
     <div className="container-fluid p-4">
-      <h2 className="fw-bold">Add Breeds</h2>
+      <h2 className="fw-bold">เพิ่มสายพันธุ์ใหม่</h2>
       <div className="card">
         <div className="card bg-white p-4">
           <div className="m-4">
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label">Breed Name</label>
+              <label className="col-sm-2 col-form-label">สายพันธุ์</label>
               <div className="col-sm-10">
                 <input
                   type="text"
@@ -62,9 +62,9 @@ const AddBreeds: React.FC = () => {
                     onSubmit();
                   }}
                 >
-                  Save
+                  บันทึก
                 </button>
-                <a href="/breeds" className="btn btn-danger">Cancle</a>
+                <a href="/breeds" className="btn btn-danger">ยกเลิก</a>
               </div>
             </div>
           </div>

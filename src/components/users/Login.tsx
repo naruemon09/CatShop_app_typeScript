@@ -22,12 +22,12 @@ const Login: React.FC = () => {
         user
       );
       console.log(response)
-      if (response.data.isSuceess === true) {
+      if (response.data.isSuceess === true && response.data.roleName == "ลูกค้า") {
         setToken(response.data.token)
         setUsername(response.data.userName)
-        navigate(-1)
+        navigate("/")
       } else {
-        swal("Oops...", response.data.userName, "error");
+        swal("เกิดข้อผิกพลาด", response.data.message, "error");
       }
     } catch (error) {
       console.log(error);
@@ -39,28 +39,30 @@ const Login: React.FC = () => {
         <div className="row">
           <div className="form-input col-lg-12 my-4">
             <div className="mb-3">
+              <label>ชื่อผู้ใช้</label>
               <input
                 type="text"
-                className="form-control form-control-lg"
+                className="form-control"
                 name="username"
                 value={user.username}
-                placeholder="Enter Your Username"
+                placeholder="กรอกชื่อผู้ใช้"
                 onChange={(e) => setUser({ ...user, username: e.target.value })}
               />
             </div>
             <div className="mb-3">
+              <label>รหัสผ่าน</label>
               <input
                 type="password"
-                className="form-control form-control-lg"
+                className="form-control"
                 name="password"
                 value={user.password}
-                placeholder="Enter Your Password"
+                placeholder="กรอกรหัสผ่าน"
                 onChange={(e) => setUser({ ...user, password: e.target.value })}
               />
             </div>
             <div className="d-grid gap-2">
               <button type="button" className="btn btn-dark btn-lg rounded-1" onClick={() => { onSubmit() }}>
-                Login it now
+                เข้าสู่ระบบ
               </button>
             </div>
           </div>

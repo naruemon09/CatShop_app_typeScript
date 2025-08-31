@@ -25,22 +25,40 @@ const Breeds: React.FC = () => {
       }
     };
     getBreeds();
-  }, []);
+  }, [breeds]);
+
+  const handleDelete = async (breedid: string) => {
+    try {
+      const response = await axios.delete(
+        `https://localhost:7092/api/Breeds/DeleteBreed/${breedid}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        console.log(response);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="container-fluid p-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2 className="fw-bold">Breeds Management</h2>
-        <a href="/addbreeds" className="btn btn-warning">+ Add New Breed</a>
+        <h2 className="fw-bold">การจัดการสายพันธุ๋</h2>
+        <a href="/addbreeds" className="btn btn-warning">+ เพิ่มสายพันธุ์ใหม่</a>
       </div>
       <div className="card bg-white p-4">
         <div className="table-responsive">
           <table className="table">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Breeds Name</th>
-                <th>Actions</th>
+                <th>#</th>
+                <th>สายพันธุ์</th>
+                <th>การจัดการ</th>
               </tr>
             </thead>
             {breeds.map((item, index) => (
@@ -50,13 +68,16 @@ const Breeds: React.FC = () => {
                   <td>{item.breedname}</td>
                   <td>
                     <a href={`/breeds/${item.breedid}`} className="btn btn-sm btn-success me-2">
-                      View
+                      ดูข้อมูล
                     </a>
                     <a href={`/updateBreeds/${item.breedid}`} className="btn btn-sm btn-warning me-2">
-                      Edit
+                      แก้ไข
                     </a>
-                    <button className="btn btn-sm btn-danger">
-                      Delete
+                    <button 
+                      type="button"
+                      onClick={() => handleDelete(item.breedid)}
+                      className="btn btn-sm btn-danger">
+                      ลบ
                     </button>
                   </td>
                 </tr>

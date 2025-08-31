@@ -9,6 +9,7 @@ import Payment from "./Payment";
 const Billing: React.FC = () => {
   const { token } = Store();
   const [orders, setOrders] = useState<IGetOrder[]>([]);
+  const totalPrice = orders.reduce((sum, r) => sum + Number(r.price), 0);
   const [form, setForm] = useState<IBilling>({
     firstname: "",
     lastname: "",
@@ -19,12 +20,10 @@ const Billing: React.FC = () => {
     notes: "",
   });
 
-  const totalPrice = orders.reduce((sum, r) => sum + Number(r.price), 0);
-
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await axios.get(
+        const response = await axios.get<IBilling>(
           `https://localhost:7092/api/Users/GetUsersByToken`,
           {
             headers: {
@@ -36,7 +35,7 @@ const Billing: React.FC = () => {
         if (response.status === 200) {
           setForm(response.data);
         }
-        const responseOrder = await axios.get(
+        const responseOrder = await axios.get<IGetOrder[]>(
           `https://localhost:7092/api/Orders/GetAllOrderByUser`,
           {
             headers: {
@@ -46,7 +45,7 @@ const Billing: React.FC = () => {
         );
         if (responseOrder.status === 200) {
            const filterOrder = responseOrder.data.filter(
-            (x) => x.orderStatus === "Pending"
+            (x) => x.orderStatus === "ยังไม่ชำระเงิน"
           );
           setOrders(filterOrder);
         }
@@ -63,9 +62,9 @@ const Billing: React.FC = () => {
         <form className="form-group">
           <div className="row d-flex flex-wrap">
             <div className="col-lg-6">
-              <h2 className="text-dark pb-3">Billing Details</h2>
+              <h2 className="text-dark pb-3">รายละเอียดการจัดส่ง</h2>
               <div className="billing-details">
-                <label>First Name *</label>
+                <label>ชื่อ *</label>
                 <input
                   type="text"
                   className="form-control mt-2 mb-4 ps-3"
@@ -74,7 +73,7 @@ const Billing: React.FC = () => {
                     setForm({ ...form, firstname: e.target.value })
                   }
                 />
-                <label>Last Name *</label>
+                <label>นามสกุล *</label>
                 <input
                   type="text"
                   className="form-control mt-2 mb-4 ps-3"
@@ -83,21 +82,21 @@ const Billing: React.FC = () => {
                     setForm({ ...form, lastname: e.target.value })
                   }
                 />
-                <label>Phone *</label>
+                <label>โทรศัพท์ *</label>
                 <input
                   type="text"
                   className="form-control mt-2 mb-4 ps-3"
                   value={form.phone}
                   onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 />
-                <label>Email address *</label>
+                <label>อีเมล *</label>
                 <input
                   type="text"
                   className="form-control mt-2 mb-4 ps-3"
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                 />
-                <label>Pick Up Date *</label>
+                <label>วันที่รับสัตว์เลี้ยง *</label>
                 <input
                   type="datetime-local"
                   className="form-control mt-2 mb-4 ps-3"
@@ -106,7 +105,7 @@ const Billing: React.FC = () => {
                     setForm({ ...form, pickupDateTime: e.target.value })
                   }
                 />
-                <label>Address *</label>
+                <label>ที่อยู่จัดส่ง *</label>
                 <textarea
                   className="form-control mt-3 ps-3 mb-3"
                   value={form.address}
@@ -115,7 +114,7 @@ const Billing: React.FC = () => {
                   }
                 />
                 <div className="mb-4">
-                  <h5>Map</h5>
+                  <h5>ปักหมุดสถานที่จัดส่ง</h5>
                   <AddressAutocomplete
                     onAddressSelect={(address, lat, lng) => {
                       setForm((prev) => ({
@@ -129,12 +128,12 @@ const Billing: React.FC = () => {
               </div>
             </div>
             <div className="col-lg-6">
-              <h2 className="text-dark pb-3">Additional Information</h2>
+              <h2 className="text-dark pb-3">ข้อมูลเพิ่มเติม</h2>
               <div className="billing-details">
-                <label>Order notes (optional)</label>
+                <label>หมายเหตุการสั่งซื้อ (ไม่บังคับ)</label>
                 <textarea
                   className="form-control pt-3 pb-3 ps-3 mt-2"
-                  placeholder="Notes about your order. Like special notes for delivery."
+                  placeholder="หมายเหตุเกี่ยวกับคำสั่งซื้อของคุณ เช่น หมายเหตุพิเศษสำหรับการจัดส่ง"
                   value={form.notes}
                   onChange={(e) =>
                     setForm({ ...form, notes: e.target.value })
@@ -142,12 +141,12 @@ const Billing: React.FC = () => {
                 ></textarea>
               </div>
               <div className="your-order mt-5">
-                <h2 className="display-7 text-dark pb-3">Cart Totals</h2>
+                <h2 className="display-7 text-dark pb-3">ยอดรวมในรถเข็น</h2>
                 <div className="total-price">
                   <table className="table">
                     <tbody>
                       <tr className="order-total border-bottom pt-2 pb-2 text-uppercase">
-                        <th>Total</th>
+                        <th>ยอดรวม</th>
                         <td data-title="Total">
                           <span className="price-amount amount ps-5">
                             <bdi>
@@ -156,7 +155,7 @@ const Billing: React.FC = () => {
                                   value={totalPrice}
                                   displayType={"text"}
                                   thousandSeparator={true}
-                                  prefix={"THB "}
+                                  prefix={"฿ "}
                                   decimalScale={2}
                                   fixedDecimalScale={true}
                                 />
@@ -168,12 +167,12 @@ const Billing: React.FC = () => {
                     </tbody>
                   </table>
                   <a
-                    href="/payment"
+                    href="/ชำระเงิน/การจ่าย"
                     className="btn btn-dark btn-lg rounded-1 w-100"
                     data-bs-toggle="modal"
                     data-bs-target="#examplePayment"
                   >
-                    Place an order
+                    สั่งซื้อสินค้า
                   </a>
                 </div>
               </div>

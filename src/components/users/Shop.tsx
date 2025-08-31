@@ -24,7 +24,7 @@ const Shop: React.FC = () => {
         if (response.status === 200) {
           console.log(response);
            const CatAvaliable = response.data.filter(
-            (r) => r.catStatus === "Avaliable")
+            (r) => r.catStatus === "ว่าง")
           if (breedId === null || breedId === undefined) {
             setCats(CatAvaliable);
           } else {
@@ -38,7 +38,7 @@ const Shop: React.FC = () => {
       }
     };
     getCats();
-  }, []);
+  }, [breedId]);
 
   const totalItems = cats.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -62,6 +62,27 @@ const Shop: React.FC = () => {
     }
   };
 
+  const handleSort = (sortType: string) => {
+    const sortedCats = [...cats];
+    switch (sortType) {
+      case "name-asc":
+        sortedCats.sort((a, b) => a.catname.localeCompare(b.catname, "th"));
+        break;
+      case "name-desc":
+        sortedCats.sort((a, b) => b.catname.localeCompare(a.catname, "th"));
+        break;
+      case "price-asc":
+        sortedCats.sort((a, b) => Number(a.price) - Number(b.price));
+        break;
+      case "price-desc":
+        sortedCats.sort((a, b) => Number(b.price) - Number(a.price));
+        break;
+      default:
+        break;
+    }
+    setCats(sortedCats);
+};
+
   return (
       <div className="shopify-grid">
         <div className="container py-5 my-5">
@@ -69,17 +90,18 @@ const Shop: React.FC = () => {
             <div className="filter-shop d-md-flex justify-content-between align-items-center">
               <div className="showing-product">
                 <p className="m-0">
-                  Showing {startIndex + 1}–{Math.min(endIndex, totalItems)} of{" "}
-                  {totalItems} results
+                  แสดง {startIndex + 1}–{Math.min(endIndex, totalItems)} จาก{" "}
+                  {totalItems} ผลลัพธ์
                 </p>
               </div>
               <div className="sort-by">
-                <select className="filter-categories border-0 m-0">
-                  <option value="">Default sorting</option>
-                  <option value="">Name (A - Z)</option>
-                  <option value="">Name (Z - A)</option>
-                  <option value="">Price (Low-High)</option>
-                  <option value="">Price (High-Low)</option>
+                <select className="filter-categories border-0 m-0"
+                onChange={(e) => handleSort(e.target.value)}>
+                  <option value="default">การเรียงลำดับเริ่มต้น</option>
+                  <option value="name-asc">ชื่อ (ก - ฮ)</option>
+                  <option value="name-desc">ชื่อ (ฮ - ก)</option>
+                  <option value="price-asc">ราคา (ต่ำ-สูง)</option>
+                  <option value="price-desc">ราคา (สูง-ต่ำ)</option>
                 </select>
               </div>
             </div>

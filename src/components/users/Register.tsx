@@ -3,13 +3,21 @@ import axios from "axios";
 import type { IDistrict, IPage, IProvince, IRegister, IRole, ISubdistrict } from "../../Interface/IAuth";
 
 const Register: React.FC <IPage> = ({ setPage }) => {
+  const today = new Date();
+  const minAgeDate = new Date(
+    today.getFullYear() - 18,
+    today.getMonth(),
+    today.getDate()
+  )
+    .toISOString()
+    .split("T")[0];
 
   const [form, setForm] = useState<IRegister>({
-    username: "",
+    userName: "",
     firstname: "",
     lastname: "",
     email: "",
-    birthdate: "",
+    birthdate: minAgeDate,
     phone: "",
     address: "",
     provinceId: 0,
@@ -26,6 +34,7 @@ const Register: React.FC <IPage> = ({ setPage }) => {
   const [province, setProvince] = useState<IProvince[]>([]);
   const [distric, setDistric] = useState<IDistrict[]>([]);
   const [subdistrict, setSubdistrict] = useState<ISubdistrict[]>([]);
+  const [massage, setMassage] = useState("")
 
   useEffect(() => {
     const getRole = async () => {
@@ -33,7 +42,7 @@ const Register: React.FC <IPage> = ({ setPage }) => {
         const response = await axios.get<IRole[]>("https://localhost:7092/api/Roles");
         if (response.status === 200) {
           const clientRoles = response.data.filter(
-            (r) => r.rolename === "Client"
+            (r) => r.rolename === "ลูกค้า"
           );
           setRole(clientRoles);
         }
@@ -50,6 +59,21 @@ const Register: React.FC <IPage> = ({ setPage }) => {
     getRole();
   }, []);
 
+  const isPhoneValid = /^0[0-9]{9}$/.test(form.phone);
+  const isEmailValid = /^[\w.+-]+@gmail\.com$/.test(form.email);
+  const isBirthdateValid = (() => {
+    if (!form.birthdate) return true;
+    const birth = new Date(form.birthdate);
+    const today = new Date();
+    const age =
+      today.getFullYear() -
+      birth.getFullYear() -
+      (today < new Date(today.getFullYear(), birth.getMonth(), birth.getDate())
+        ? 1
+        : 0);
+    return age >= 18;
+  })();
+
   const onSubmit = async () => {
     try {
       const formData = {
@@ -64,7 +88,10 @@ const Register: React.FC <IPage> = ({ setPage }) => {
       console.log(response);
       if (response.data.isSuceess === true) {
         setPage?.(false)
+      } else {
+        setMassage(response.data.message)
       }
+
     } catch (error) {
       console.log(error);
     }
@@ -108,119 +135,151 @@ const Register: React.FC <IPage> = ({ setPage }) => {
     <div className="container">
       <div className="row">
         <div className="form-input col-lg-12 my-4">
+          {massage && <label style={{color:'#dc3545'}}>{massage}</label>}
           <div className="mb-3">
+            <label>ชื่อผู้ใช้</label>
             <input
               type="text"
-              className="form-control form-control-lg"
-              value={form.username}
-              onChange={(e) => setForm({ ...form, username: e.target.value })}
-              placeholder="Enter Your Username"
+              className="form-control"
+              value={form.userName}
+              onChange={(e) => setForm({ ...form, userName: e.target.value })}
+              placeholder="กรอก ชื่อผู้ใช้"
             />
           </div>
 
           <div className="mb-3">
+            <label>รหัสผ่าน</label>
             <input
               type="password"
-              className="form-control form-control-lg"
+              className="form-control"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
-              placeholder="Enter Your Password"
+              placeholder="กรอก รหัสผ่าน"
             />
           </div>
 
           <div className="row">
             <div className="col-md-6 mb-3">
+              <label>ชื่อ</label>
               <input
                 type="text"
-                className="form-control form-control-lg"
+                className="form-control"
                 value={form.firstname}
                 onChange={(e) =>
                   setForm({ ...form, firstname: e.target.value })
                 }
-                placeholder="Enter Your Firstname"
+                placeholder="กรอก ชื่อ"
               />
             </div>
 
             <div className="col-md-6 mb-3">
+              <label>นามสกุล</label>
               <input
                 type="text"
-                className="form-control form-control-lg"
+                className="form-control"
                 value={form.lastname}
                 onChange={(e) => setForm({ ...form, lastname: e.target.value })}
-                placeholder="Enter Your Lastname"
+                placeholder="กรอก นามสกุล"
               />
             </div>
           </div>
 
           <div className="row">
             <div className="col-md-6 mb-3">
+              <label>วัน / เดือน / ปี เกิด</label>
               <input
                 type="date"
-                className="form-control form-control-lg"
+                className="form-control"
                 value={form.birthdate}
+                max={minAgeDate}
                 onChange={(e) =>
                   setForm({ ...form, birthdate: e.target.value })
                 }
-                placeholder="birthdate"
+                placeholder="วัน/เดือน/ปี เกิด"
               />
+              {!isBirthdateValid && form.birthdate && (
+              <small style={{color:'#dc3545'}}>
+                ผู้สมัครต้องมีอายุอย่างน้อย 18 ปี
+              </small>
+            )}
             </div>
 
             <div className="col-md-6 mt-2">
-              <label className="form-control-lg">Gender :</label>
-              <input
-                type="radio"
-                value={"0"}
-                checked={form.gender === "0"}
-                onChange={(e) => setForm({ ...form, gender: e.target.value })}
-              />
-              <label className="px-2">Male</label>
+              <label>เพศ</label>
+              <div className="form-check">
+                <input
+                  type="radio"
+                  className="form-check-input"
+                  value={"0"}
+                  checked={form.gender === "0"}
+                  onChange={(e) => setForm({ ...form, gender: e.target.value })}
+                />
+                <label className="px-2">ชาย</label>
+              </div>
 
-              <input
-                type="radio"
-                value={"1"}
-                checked={form.gender === "1"}
-                onChange={(e) => setForm({ ...form, gender: e.target.value })}
-              />
-              <label className="px-2">Female</label>
+              <div className="form-check">
+                <input
+                  type="radio"
+                  className="form-check-input"
+                  value={"1"}
+                  checked={form.gender === "1"}
+                  onChange={(e) => setForm({ ...form, gender: e.target.value })}
+                />
+                <label className="px-2">หญิง</label>
+              </div>
+              
             </div>
           </div>
 
           <div className="mb-3">
+            <label>อีเมล</label>
             <input
               type="email"
-              className="form-control form-control-lg"
+              className="form-control"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
-              placeholder="Enter Your Email Address"
+              placeholder="กรอก อีเมล"
             />
+            {!isEmailValid && form.email && (
+              <small style={{color:'#dc3545'}}>
+                ต้องเป็นอีเมล Gmail เท่านั้น
+              </small>
+            )}
           </div>
 
           <div className="mb-3 mt-3">
+            <label>โทรศัพท์</label>
             <input
               type="tel"
-              className="form-control form-control-lg"
+              className="form-control"
               value={form.phone}
               onChange={(e) => setForm({ ...form, phone: e.target.value })}
-              placeholder="Enter Your Phone"
+              placeholder="กรอก หมายเลขโทรศัพท์"
             />
+            {!isPhoneValid && form.phone && (
+              <small style={{color:'#dc3545'}}>
+                หมายเลขโทรศัพท์ต้องขึ้นต้นด้วย 0 และมี 10 หลัก
+              </small>
+            )}
           </div>
 
+          <label>ที่อยู่</label>
           <textarea
-            className="form-control form-control-lg"
+            className="form-control"
             value={form.address}
             onChange={(e) => setForm({ ...form, address: e.target.value })}
-            placeholder="Enter Your Address"
+            placeholder="กรอก บ้านเลขที่,ซอย,หมู่,ถนน"
           />
 
-          <div className="mb-3">
+          <div className="mb-3 mt-3">
             <div className="row">
               <div className="col-md-3 mb-3">
-                <label className="col-sm-2 col-form-label">Provinces</label>
+                <label>จังหวัด</label>
                 <select
                   className="form-control dropdown-toggle"
                   onChange={(e) => selectProvince(e)}
                 >
-                  <option className="dropdown-item">Select Province</option>
+                  <option className="dropdown-item">เลือก จังหวัด</option>
 
                   {province.map((item, index) => (
                     <option
@@ -228,18 +287,18 @@ const Register: React.FC <IPage> = ({ setPage }) => {
                       className="dropdown-item"
                       value={item.id}
                     >
-                      {item.nameInEnglish}
+                      {item.nameInThai}
                     </option>
                   ))}
                 </select>
               </div>
               <div className="col-md-3 mb-3">
-                <label className="col-sm-2 col-form-label">Distric</label>
+                <label>เขต/อำเภอ</label>
                 <select
                   className="form-control dropdown-toggle"
                   onChange={(e) => selectDistric(e)}
                 >
-                  <option className="dropdown-item">Select Distric</option>
+                  <option className="dropdown-item">เลือก เขต/อำเภอ</option>
 
                   {distric.map((item, index) => (
                     <option
@@ -247,31 +306,31 @@ const Register: React.FC <IPage> = ({ setPage }) => {
                       className="dropdown-item"
                       value={item.id}
                     >
-                      {item.nameInEnglish}
+                      {item.nameInThai}
                     </option>
                   ))}
                 </select>
               </div>
               <div className="col-md-3 mb-3">
-                <label className="col-sm-2 col-form-label">Subdistrict</label>
+                <label>แขวง/ตำบล</label>
                 <select
                   className="form-control dropdown-toggle"
                   onChange={(e) => selectSubdistrict(e)}
                 >
-                  <option className="dropdown-item">Select Subdistrict</option>
+                  <option className="dropdown-item">เลือก แขวง/ตำบล</option>
                   {subdistrict.map((item, index) => (
                     <option
                       key={index}
                       className="dropdown-item"
                       value={item.id}
                     >
-                      {item.nameInEnglish}
+                      {item.nameInThai}
                     </option>
                   ))}
                 </select>
               </div>
               <div className="col-md-3 mb-3">
-                <label className="col-sm-2 col-form-label">Zipcode</label>
+                <label>รหัสไปรษณีย์</label>
                 <input
                   type="text"
                   className="form-control"
@@ -290,7 +349,7 @@ const Register: React.FC <IPage> = ({ setPage }) => {
                 onSubmit();
               }}
             >
-              Register it now
+              สมัครสมาชิก
             </button>
           </div>
         </div>

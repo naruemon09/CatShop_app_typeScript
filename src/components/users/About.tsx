@@ -7,38 +7,43 @@ const About = () => {
         <div className="container">
           <div className="row ">
             <div className="col-md-6 my-4 pe-5">
-              <h2 className="">How Waggy Started </h2>
+              <h2 className="">การเริ่มต้นของ Rimberio </h2>
               <p>
-                In commodo auctor eget congue sit. Ultrices eget pretium sit
-                euismod mi id. Risus, aliquam odio posuere ac in in nisl sed
-                augue. Porta aenean egestas malesuada in pulvinar enim viverra.
+                ในส่วนของการทำงานร่วมกัน จะมีการจัดการและวางแผนอย่างเหมาะสม
+                การปรับปรุงคุณภาพและการบริหารจัดการเป็นสิ่งสำคัญ
+                เพื่อให้ได้ผลลัพธ์ที่ดีและมีประสิทธิภาพ
+                การพัฒนาและดำเนินการอย่างรอบคอบจะช่วยให้เกิดความสำเร็จในระยะยาว
               </p>
             </div>
             <div className="col-md-6 my-4 ">
-              <h2 className="">More About Us </h2>
+              <h2 className="">ข้อมูลเพิ่มเติมเกี่ยวกับเรา </h2>
               <p>
-                In commodo auctor aenean egestas malesuada in pulvinar enim
-                viverra.
+                การจัดการอย่างมีประสิทธิภาพและยืดหยุ่น
+                เพื่อให้การดำเนินงานราบรื่นและมั่นคง
               </p>
               <p className="m-0">
                 {" "}
-                <span className="text-primary">✓</span> Porta aenean egestas
-                malesuada in pulvinar enim viverra.
+                <span className="text-primary">✓</span>{" "}
+                การจัดการที่ราบรื่นและมั่นคง
+                ช่วยให้ทุกอย่างดำเนินไปได้อย่างมีประสิทธิภาพ
               </p>
               <p className="m-0">
                 {" "}
-                <span className="text-primary">✓</span> Porta aenean egestas
-                malesuada in pulvinar enim viverra.
+                <span className="text-primary">✓</span>{" "}
+                การจัดการที่ราบรื่นและมั่นคง
+                ช่วยให้ทุกอย่างดำเนินไปได้อย่างมีประสิทธิภาพ
               </p>
               <p className="m-0">
                 {" "}
-                <span className="text-primary">✓</span> Porta aenean egestas
-                malesuada in pulvinar enim viverra.
+                <span className="text-primary">✓</span>{" "}
+                การจัดการที่ราบรื่นและมั่นคง
+                ช่วยให้ทุกอย่างดำเนินไปได้อย่างมีประสิทธิภาพ
               </p>
               <p className="m-0">
                 {" "}
-                <span className="text-primary">✓</span> Porta aenean egestas
-                malesuada in pulvinar enim viverra.
+                <span className="text-primary">✓</span>{" "}
+                การจัดการที่ราบรื่นและมั่นคง
+                ช่วยให้ทุกอย่างดำเนินไปได้อย่างมีประสิทธิภาพ
               </p>
             </div>
           </div>
@@ -50,26 +55,23 @@ const About = () => {
           <div className="row ">
             <div className="col-md-6">
               <h2 className="display-4">
-                You can buy best pet products from Waggy.
+                คุณสามารถซื้อผลิตภัณฑ์สำหรับสัตว์เลี้ยงที่ดีที่สุดได้จาก
+                Rimberio
               </h2>
             </div>
             <div className="col-md-6">
               <p>
-                Aliquet nunc vitae interdum mauris pretium lectus mauris viverra
-                ornare quam diam felis. Ultrices eget pretium sit euismod mi id
-                risus, aliquam odio posuere ac in in nisl sed augue. Porta
-                aenean egestas malesuada in pulvinar enim viverra. ipsum dolor
-                sit amet consectetur. Ipsum ipsum ut pulvinar ipsum cras metus
-                purus mattis integer. Tellus ipsum viverra semper quisque eget
-                nisl vel congue consectetur.
+                การจัดการชีวิตอย่างสมดุลในปัจจุบัน
+                ให้ความสำคัญกับคุณค่าและความมั่นคงในการดำเนินชีวิต
+                รูปแบบการจัดการและวิธีการต่าง ๆ
+                ช่วยให้ทุกอย่างราบรื่นและสอดคล้องกัน
+                นำไปสู่การเติบโตและความสมบูรณ์ในทุกด้าน
+                การวางแผนอย่างรอบคอบช่วยให้เราดำเนินชีวิตได้อย่างมั่นคงและมีประสิทธิภาพ
               </p>
               <p>
-                Ultrices eget pretium sit euismod mi id risus, aliquam odio
-                posuere ac in in nisl sed augue. Porta aenean egestas malesuada
-                in pulvinar enim viverra. ipsum dolor sit amet consectetur.
-                Ipsum ipsum ut pulvinar ipsum cras metus purus mattis integer.
-                Tellus ipsum viverra semper quisque eget nisl vel congue
-                consectetur.
+                การจัดการสิ่งต่าง ๆ อย่างเหมาะสมให้เกิดความสมดุลและประสิทธิภาพ
+                การจัดระเบียบและวางแผนอย่างรอบคอบช่วยให้ทุกอย่างดำเนินไปอย่างราบรื่น
+                การดูแลและปรับปรุงอย่างต่อเนื่องช่วยสร้างความมั่นคงและความแข็งแรงในทุกด้านของชีวิต
               </p>
             </div>
           </div>

@@ -56,27 +56,13 @@ const UpdateBreed: React.FC = () => {
   return (
     <div className="container-fluid p-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2 className="fw-bold">Breeds Detail</h2>
+        <h2 className="fw-bold">แก้ไขสายพันธุ๋</h2>
       </div>
       <div className="card">
         <div className="card bg-white p-4">
           <div className="m-4">
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label">Breed ID</label>
-              <div className="col-sm-10">
-                <input
-                  type="text"
-                  className="form-control-plaintext"
-                  value={breed.breedid}
-                  disabled
-                  onChange={(e) =>
-                    setBreed({ ...breed, breedid: e.target.value })
-                  }
-                />
-              </div>
-            </div>
-            <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label">Breed Name</label>
+              <label className="col-sm-2 col-form-label">สายพันธุ์</label>
               <div className="col-sm-10">
                 <input
                   type="text"
@@ -97,10 +83,10 @@ const UpdateBreed: React.FC = () => {
                     onSubmit();
                   }}
                 >
-                  Save
+                  บันทึก
                 </button>
                 <a href="/breeds" className="btn btn-danger">
-                  Cancle
+                  ยกเลิก
                 </a>
               </div>
             </div>

@@ -69,17 +69,17 @@ const CartDetail: React.FC = () => {
       style={{ height: "100%", overflow: "hidden", overflowY: "auto" }}
     >
       <div className="card bg-white p-4">
-        <h1 className="fw-bold">Cart Detail</h1>
+        <h1 className="fw-bold">รายละเอียดตะกร้าสินค้า</h1>
         <div className="">
           <p className="fw-bold">
-            Cart ID : <span className="fw-normal">{carts.cartId}</span>
+            รหัสตะกร้าสินค้า : <span className="fw-normal">{carts.cartId}</span>
           </p>
         </div>
 
         <div className="row">
           <div className="col-4">
             <p className="fw-bold">
-              Name :
+              ชื่อ - นามสกุล :
               <span className="fw-normal">
                 {carts.firstname} {carts.lastname}
               </span>
@@ -87,19 +87,19 @@ const CartDetail: React.FC = () => {
           </div>
           <div className="col-4">
             <p className="fw-bold">
-              Phone : <span className="fw-normal">{carts.phone}</span>
+              โทรศัพท์ : <span className="fw-normal">{carts.phone}</span>
             </p>
           </div>
           <div className="col-4">
             <p className="fw-bold">
-              Email : <span className="fw-normal">{carts.email}</span>
+              อีเมล : <span className="fw-normal">{carts.email}</span>
             </p>
           </div>
         </div>
 
         <div>
           <p className="fw-bold">
-            Address : <span className="fw-normal">{carts.address}</span>
+            ที่อยู่ : <span className="fw-normal">{carts.address}</span>
           </p>
         </div>
 
@@ -107,12 +107,12 @@ const CartDetail: React.FC = () => {
           <table className="table m-4">
             <thead>
               <tr>
-                <th className="card-title text-uppercase">Product</th>
-                <th className="card-title text-uppercase">Breed</th>
-                <th className="card-title text-uppercase">Gender</th>
-                <th className="card-title text-uppercase">Age</th>
-                <th className="card-title text-uppercase">Size</th>
-                <th className="card-title text-uppercase">Price</th>
+                <th className="card-title text-uppercase">สัตว์เลี้ยง</th>
+                <th className="card-title text-uppercase">สายพันธุ์</th>
+                <th className="card-title text-uppercase">เพศ</th>
+                <th className="card-title text-uppercase">อายุ</th>
+                <th className="card-title text-uppercase">ขนาด</th>
+                <th className="card-title text-uppercase">ราคา</th>
               </tr>
             </thead>
             <tbody>
@@ -154,12 +154,12 @@ const CartDetail: React.FC = () => {
                       <span className="fw-medium mx-1">
                         {calculateAge(item.birthdate).years === 0 ? (
                           <>
-                            {calculateAge(item.birthdate).months} months
+                            {calculateAge(item.birthdate).months} เดือน
                           </>
                         ) : (
                           <>
-                            {calculateAge(item.birthdate).years} years /
-                            {calculateAge(item.birthdate).months} months
+                            {calculateAge(item.birthdate).years} ปี /
+                            {calculateAge(item.birthdate).months} เดือน
                           </>
                         )}
                       </span>
@@ -188,7 +188,7 @@ const CartDetail: React.FC = () => {
                 </tr>
               ))}
               <tr className="py-4 align-middle">
-                <th className="card-title text-uppercase">Subtotal</th>
+                <th className="card-title text-uppercase">ยอดรวม</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -199,7 +199,7 @@ const CartDetail: React.FC = () => {
                       value={totalPrice}
                       displayType={"text"}
                       thousandSeparator={true}
-                      prefix={"THB "}
+                      prefix={"฿ "}
                       decimalScale={2}
                       fixedDecimalScale={true}
                     />

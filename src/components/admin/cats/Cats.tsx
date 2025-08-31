@@ -26,7 +26,25 @@ const Cats: React.FC = () => {
       }
     };
     getBreeds();
-  }, []);
+  }, [cats]);
+
+  const handleDelete = async (catId: string) => {
+    try {
+      const response = await axios.delete(
+        `https://localhost:7092/api/Cats/DeleteCat/${catId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        console.log(response);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div
@@ -34,9 +52,9 @@ const Cats: React.FC = () => {
       style={{ height: "100%", overflow: "hidden", overflowY: "auto" }}
     >
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2 className="fw-bold">Cats Management</h2>
+        <h2 className="fw-bold">การจัดการสัตว์เลี้ยง</h2>
         <a href="/addcats" className="btn btn-warning">
-          + Add New Cat
+          + เพิ่มแมวใหม่
         </a>
       </div>
       <div className="card bg-white p-4">
@@ -44,14 +62,14 @@ const Cats: React.FC = () => {
           <table className="table">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Images</th>
-                <th>Name</th>
-                <th>Breed</th>
-                <th>Gender</th>
-                <th>Price</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th>#</th>
+                <th>รูปภาพ</th>
+                <th>ชื่อ</th>
+                <th>สายพันธุ์</th>
+                <th>เพศ</th>
+                <th>ราคา</th>
+                <th>สถานะ</th>
+                <th>การจัดการ</th>
               </tr>
             </thead>
             {cats.map((item, index) => (
@@ -66,7 +84,7 @@ const Cats: React.FC = () => {
                   </td>
                   <td>{item.catname}</td>
                   <td>{item.breedname}</td>
-                  <td>{item.gender === "0" ? "Male" : "Female"}</td>
+                  <td>{item.gender === "0" ? "ชาย" : "หญิง"}</td>
                   <td>
                     <NumericFormat
                       value={item.price}
@@ -78,25 +96,25 @@ const Cats: React.FC = () => {
                   </td>
                   <td
                     className={`m-2 ${
-                      item.catStatus === "Avaliable"
+                      item.catStatus === "ว่าง"
                         ? "badge bg-success"
-                        : item.catStatus === "Adopted"
+                        : item.catStatus === "ขายแล้ว"
                         ? "badge bg-info"
-                        : item.catStatus === "Sick"
+                        : item.catStatus === "ป่วย"
                         ? "badge bg-warning"
-                        : item.catStatus === "Death"
+                        : item.catStatus === "เสียชีวิต"
                         ? "badge bg-danger"
                         : "badge bg-secondary"
                     }`}
                     style={{
                       color:
-                        item.catStatus === "Avaliable"
+                        item.catStatus === "ว่าง"
                           ? "#198754"
-                          : item.catStatus === "Adopted"
+                          : item.catStatus === "ขายแล้ว"
                           ? "#0dcaf0"
-                          : item.catStatus === "Sick"
+                          : item.catStatus === "ป่วย"
                           ? "#ffc107"
-                          : item.catStatus === "Death"
+                          : item.catStatus === "เสียชีวิต"
                           ? "#dc3545"
                           : "#6c757d",
                     }}
@@ -108,15 +126,18 @@ const Cats: React.FC = () => {
                       href={`/cats/${item.catId}`}
                       className="btn btn-sm btn-success me-2"
                     >
-                      View
+                      ดูข้อมูล
                     </a>
                     <a
                       href={`/updateCats/${item.catId}`}
                       className="btn btn-sm btn-warning me-2"
                     >
-                      Edit
+                      แก้ไข
                     </a>
-                    <button className="btn btn-sm btn-danger">Delete</button>
+                    <button 
+                    type="button"
+                      onClick={() => handleDelete(item.catId)} 
+                      className="btn btn-sm btn-danger">ลบ</button>
                   </td>
                 </tr>
               </tbody>

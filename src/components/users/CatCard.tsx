@@ -27,7 +27,7 @@ const CatCard: React.FC<{ item: IGetCats }> = ({ item }) => {
   const age = calculateAge(item.birthdate);
 
   const handleViewDetail = (id: string) => {
-    navigate("/shop/detail", { state: { catid: id , age: age} });
+    navigate("/ร้านค้า/รายละเอียด", { state: { catid: id , age: age} });
   };
 
   const onSubmit = async (catId: string) => {
@@ -93,17 +93,17 @@ const CatCard: React.FC<{ item: IGetCats }> = ({ item }) => {
         <div className="card-text">
           <div className="meta-product pt-4">
             <div className="meta-item d-flex align-items-baseline">
-              <h6 className="item-title fw-bold no-margin pe-2">Breed : </h6>
+              <h6 className="item-title fw-bold no-margin pe-2">สายพันธุ์ : </h6>
               <h6 className="select-item">{item.breedname}</h6>
             </div>
             <div className="meta-item d-flex align-items-baseline">
-              <h6 className="item-title fw-bold no-margin pe-2">Age : </h6>
+              <h6 className="item-title fw-bold no-margin pe-2">อายุ : </h6>
 
               {age.years === 0 ? (
-                <h6 className="select-item">{age.months} months</h6>
+                <h6 className="select-item">{age.months} เดือน</h6>
               ) : (
                 <h6 className="select-item">
-                  {age.years} years / {age.months} months
+                  {age.years} ปี / {age.months} เดือน
                 </h6>
               )}
             </div>
@@ -113,7 +113,7 @@ const CatCard: React.FC<{ item: IGetCats }> = ({ item }) => {
               value={item.price}
               displayType={"text"}
               thousandSeparator={true}
-              prefix={"THB "}
+              prefix={"฿ "}
               decimalScale={2}
               fixedDecimalScale={true}
             />
@@ -125,14 +125,14 @@ const CatCard: React.FC<{ item: IGetCats }> = ({ item }) => {
               className="btn-cart me-3 px-4 pt-3 pb-3"
               onClick={() => onSubmit(item.catId)}
             >
-              <h5 className="text-uppercase m-0">Add to Cart</h5>
+              <h5 className="text-uppercase m-0">เพิ่มใส่รถเข็น</h5>
             </button>
             <button
               type="button"
               className="btn-wishlist px-4 p-3"
               onClick={() => handleViewDetail(item.catId)}
             >
-              View
+              รายละเอียด
             </button>
           </div>
         </div>

@@ -24,6 +24,7 @@ const CatDetail: React.FC = () => {
     catStatus: "",
     price: "",
     idnumber: "",
+    addDateTime: ""
   });
 
   useEffect(() => {
@@ -91,7 +92,7 @@ const CatDetail: React.FC = () => {
                     value={cats.price}
                     displayType={"text"}
                     thousandSeparator={true}
-                    prefix={"THB "}
+                    prefix={"฿ "}
                     decimalScale={2}
                     fixedDecimalScale={true}
                   />
@@ -100,16 +101,16 @@ const CatDetail: React.FC = () => {
               <p>{cats.catdetails}</p>
               <div className="meta-product pt-4">
                 <div className="meta-item d-flex align-items-baseline">
-                  <h6 className="item-title fw-bold no-margin pe-2">Breed :</h6>
+                  <h6 className="item-title fw-bold no-margin pe-2">สายพันธ์ุ :</h6>
                   <ul className="select-list list-unstyled d-flex">
                     <li className="select-item">{cats.breedname}</li>
                   </ul>
                 </div>
                 <div className="meta-item d-flex align-items-baseline">
-                  <h6 className="item-title fw-bold no-margin pe-2">Gender :</h6>
+                  <h6 className="item-title fw-bold no-margin pe-2">เพศ :</h6>
                   <ul className="select-list list-unstyled d-flex">
                     <li className="select-item">
-                      {cats.gender === "0" ? "Male" : "Female"}
+                      {cats.gender === "0" ? "ชาย" : "หญิง"}
                     </li>
                   </ul>
                 </div>
@@ -122,21 +123,21 @@ const CatDetail: React.FC = () => {
                   </ul>
                 </div>
                 <div className="meta-item d-flex align-items-baseline">
-                  <h6 className="item-title fw-bold no-margin pe-2">Age :</h6>
+                  <h6 className="item-title fw-bold no-margin pe-2">อายุ :</h6>
                   <ul className="select-list list-unstyled d-flex">
                     <li className="select-item">
                       {age.years === 0 ? (
-                        <h6 className="select-item">{age.months} months</h6>
+                        <h6 className="select-item">{age.months} เดือน</h6>
                       ) : (
                         <h6 className="select-item">
-                          {age.years} years / {age.months} months
+                          {age.years} ปี / {age.months} เดือน
                         </h6>
                       )}
                     </li>
                   </ul>
                 </div>
                 <div className="meta-item d-flex align-items-baseline">
-                  <h6 className="item-title fw-bold no-margin pe-2">Size :</h6>
+                  <h6 className="item-title fw-bold no-margin pe-2">ขนาด :</h6>
                   <ul className="select-list list-unstyled d-flex">
                     <li className="select-item">{cats.size}</li>
                   </ul>
@@ -148,7 +149,7 @@ const CatDetail: React.FC = () => {
                     className="btn-cart me-3 px-4 pt-3 pb-3"
                     onClick={() => onSubmit(cats.catId)}
                   >
-                    <h5 className="text-uppercase m-0">Add to Cart</h5>
+                    <h5 className="text-uppercase m-0">เพิ่มใส่รถเข็น</h5>
                   </button>
                 </div>
               </div>

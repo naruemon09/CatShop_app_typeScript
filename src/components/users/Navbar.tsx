@@ -8,12 +8,12 @@ import type { IGetOrder } from "../../Interface/IOrder";
 
 const Navbar: React.FC = () => {
   const { token, username, logout } = Store();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
+    navigate("/บัญชีผู้ใช้")
   };
-
-  const navigate = useNavigate();
 
   const [breeds, setBreeds] = useState<IGetBreeds[]>([]);
   const [cats, setCats] = useState<IGetOrder[]>([]);
@@ -28,7 +28,6 @@ const Navbar: React.FC = () => {
           },
         });
         if (response.status === 200) {
-          console.log(response);
           setBreeds(response.data);
         }
         const responseCat = await axios.get<IGetOrder[]>(
@@ -41,8 +40,9 @@ const Navbar: React.FC = () => {
         );
         if (responseCat.status === 200) {
           const filterOrder = responseCat.data.filter(
-            (x) => x.orderStatus === "Pending"
+            (x) => x.orderStatus === "ยังไม่ชำระเงิน"
           );
+          console.log(responseCat.data);
           setCats(filterOrder);
         }
       } catch (error) {
@@ -50,10 +50,10 @@ const Navbar: React.FC = () => {
       }
     };
     getBreeds();
-  }, [cats , breeds]);
+  }, [cats]);
 
   const handleBreed = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    navigate("/shop", { state: { breedid: event.target.value } });
+    navigate("/ร้านค้า", { state: { breedid: event.target.value } });
   };
 
   return (
@@ -81,7 +81,7 @@ const Navbar: React.FC = () => {
                 <input
                   type="text"
                   className="form-control border-0 bg-transparent"
-                  placeholder="Search for more than 10,000 products"
+                  placeholder="ค้นหาสินค้ามากกว่า 100 รายการ"
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -100,12 +100,12 @@ const Navbar: React.FC = () => {
 
           <div className="col-sm-8 col-lg-4 d-flex justify-content-end gap-5 align-items-center mt-4 mt-sm-0 justify-content-center justify-content-sm-end">
             <div className="support-box text-end d-none d-xl-block">
-              <span className="fs-6 secondary-font text-muted">Phone</span>
-              <h5 className="mb-0">+980-34984089</h5>
+              <span className="fs-6 secondary-font text-muted">โทรศัพท์</span>
+              <h5 className="mb-0">098-7654321</h5>
             </div>
             <div className="support-box text-end d-none d-xl-block">
-              <span className="fs-6 secondary-font text-muted">Email</span>
-              <h5 className="mb-0">waggy@gmail.com</h5>
+              <span className="fs-6 secondary-font text-muted">อีเมล</span>
+              <h5 className="mb-0">rimberio@gmail.com</h5>
             </div>
           </div>
         </div>
@@ -148,13 +148,13 @@ const Navbar: React.FC = () => {
                   <ul className="dropdown-menu m-2" aria-labelledby="person">
                     <li className="m-3">
                       <a className="dropdown-item " href="#">
-                        Welcome , {username}
+                        สวัสดี , {username}
                       </a>
                     </li>
 
                     <li className="m-3">
-                      <a className="dropdown-item" href="/profile">
-                        My Account
+                      <a className="dropdown-item" href="/โปรไฟล์">
+                        บัญชีของฉัน
                       </a>
                     </li>
 
@@ -166,13 +166,13 @@ const Navbar: React.FC = () => {
                           handleLogout();
                         }}
                       >
-                        Logout
+                        ออกจากระบบ
                       </button>
                     </li>
                   </ul>
                 </li>
               ) : (
-                <a href="/account" className="mx-3">
+                <a href="/บัญชีผู้ใช้" className="mx-3">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -275,7 +275,7 @@ const Navbar: React.FC = () => {
                   handleBreed(e);
                 }}
               >
-                <option>Shop by Breeds</option>
+                <option>เลือกตามสายพันธุ์</option>
                 {breeds.map((item) => (
                   <option value={item.breedid}>{item.breedname}</option>
                 ))}
@@ -284,7 +284,7 @@ const Navbar: React.FC = () => {
               <ul className="navbar-nav menu-list list-unstyled d-flex gap-md-3 mb-0">
                 <li className="nav-item">
                   <a href="/" className="nav-link active">
-                    Home
+                    หน้าหลัก
                   </a>
                 </li>
                 <li className="nav-item dropdown">
@@ -295,54 +295,54 @@ const Navbar: React.FC = () => {
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    Pages
+                    เมนู
                   </a>
                   <ul className="dropdown-menu" aria-labelledby="pages">
                     <li>
-                      <a href="/about" className="dropdown-item">
-                        About Us
+                      <a href="/เกี่ยวกับ" className="dropdown-item">
+                        เกี่ยวกับ
                       </a>
                     </li>
                     <li>
-                      <a href="/shop" className="dropdown-item">
-                        Shop
+                      <a href="/ร้านค้า" className="dropdown-item">
+                        สินค้า
                       </a>
                     </li>
                     <li>
-                      <a href="/checkout" className="dropdown-item">
-                        Checkout
+                      <a href="/ชำระเงิน" className="dropdown-item">
+                        ชำระเงิน
                       </a>
                     </li>
                     <li>
-                      <a href="/contact" className="dropdown-item">
-                        Contact
+                      <a href="/ติดต่อเรา" className="dropdown-item">
+                        ติดต่อเรา
                       </a>
                     </li>
                     <li>
                       {token ?
-                        <a href="/profile" className="dropdown-item">
-                          Account
+                        <a href="/โปรไฟล์" className="dropdown-item">
+                          บัญชีผู้ใช้
                         </a>
                         :
-                        <a href="/account" className="dropdown-item">
-                          Account
+                        <a href="/บัญชีผู้ใช้" className="dropdown-item">
+                          เข้าสู่ระบบ / สมัครสมาชิก
                         </a>
                       }</li>
                   </ul>
                 </li>
                 <li className="nav-item">
-                  <a href="/shop" className="nav-link">
-                    Shop
+                  <a href="/ร้านค้า" className="nav-link">
+                    ร้านค้า
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a href="/about" className="nav-link">
-                    About
+                  <a href="/เกี่ยวกับ" className="nav-link">
+                    เกี่ยวกับ
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a href="/contact" className="nav-link">
-                    Contact
+                  <a href="/ติดต่อเรา" className="nav-link">
+                    ติดต่อ
                   </a>
                 </li>
               </ul>
@@ -381,17 +381,17 @@ const Navbar: React.FC = () => {
                       >
                         <li>
                           <a className="dropdown-item" href="#">
-                            Welcome , {username}
+                            สวัสดี , {username}
                           </a>
                         </li>
                         <li>
-                          <a className="dropdown-item" href="/profile">
-                            My Account
+                          <a className="dropdown-item" href="/โปรไฟล์">
+                            บัญชีของฉัน
                           </a>
                         </li>
                         <li>
-                          <a className="dropdown-item" href="/orderHistory">
-                            Order history
+                          <a className="dropdown-item" href="/ประวัติการสั่งซื้อ">
+                           ประวัติการสั่งซื้อ
                           </a>
                         </li>
 
@@ -403,14 +403,14 @@ const Navbar: React.FC = () => {
                               handleLogout();
                             }}
                           >
-                            Logout
+                            ออกจากระบบ
                           </button>
                         </li>
                       </ul>
                     </li>
                   ) : (
                     <li className="nav-item mb-2">
-                      <a href="/account" className="mx-3">
+                      <a href="/บัญชีผู้ใช้" className="mx-3">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"

@@ -24,14 +24,14 @@ const Cart: React.FC <CartProps> = ({cats , totalPrice}) => {
       <div className="offcanvas-body">
         <div className="order-md-last">
           <h4 className="d-flex justify-content-between align-items-center mb-3">
-            <span className="text-primary">Your cart</span>
-            <span className="badge bg-primary rounded-circle pt-2">{cats.length}</span>
+            <span className="text-primary">รถเข็น</span>
+              <span className="badge bg-primary rounded-circle pt-2">{cats.length}</span>
           </h4>
           <ul className="list-group mb-3">
             {cats.map((item) => (
               <li className="list-group-item d-flex justify-content-between lh-sm">
                 <div>
-                  <h6 className="my-0">{item.catname}</h6>
+                  <h6 className="my-0">{item.catName}</h6>
                   <small className="text-body-secondary">
                     {item.breedname}
                   </small>
@@ -48,13 +48,13 @@ const Cart: React.FC <CartProps> = ({cats , totalPrice}) => {
               </li>
             ))}
             <li className="list-group-item d-flex justify-content-between">
-              <span className="fw-bold">Total (THB)</span>
+              <span className="fw-bold">ยอดรวม (บาท)</span>
               <strong>
                 <NumericFormat
                   value={totalPrice}
                   displayType={"text"}
                   thousandSeparator={true}
-                  prefix={"THB "}
+                  prefix={"฿ "}
                   decimalScale={2}
                   fixedDecimalScale={true}
                 />
@@ -62,8 +62,8 @@ const Cart: React.FC <CartProps> = ({cats , totalPrice}) => {
             </li>
           </ul>
 
-          <a href="/checkout" className="w-100 btn btn-primary btn-lg" type="submit">
-            Continue to checkout
+          <a href="/ชำระเงิน" className="w-100 btn btn-primary btn-lg" type="submit">
+            ดำเนินการชำระเงิน
           </a>
         </div>
       </div>

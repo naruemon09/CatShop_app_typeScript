@@ -2,7 +2,7 @@ import React from 'react'
 import Banner from './Banner'
 import { Outlet } from 'react-router-dom'
 
-const LayoutBanner = () => {
+const LayoutBanner: React.FC = () => {
   return (
     <div>
         <Banner/>

@@ -62,7 +62,7 @@ const Footer: React.FC = () => {
                         <div className="col-md-3">
                             <div className="footer-menu">
                                 <img src="/src/images/cat_logo.png" alt="logo" />
-                                <p className="blog-paragraph fs-6 mt-3">Subscribe to our newsletter to get updates about our grand offers.</p>
+                                <p className="blog-paragraph fs-6 mt-3">สมัครรับจดหมายข่าวของเราเพื่อรับข้อมูลอัปเดตเกี่ยวกับข้อเสนอพิเศษของเรา</p>
                                 <div className="social-links">
                                     <ul className="d-flex list-unstyled gap-2">
                                         <li className="social">
@@ -97,55 +97,55 @@ const Footer: React.FC = () => {
                         </div>
                         <div className="col-md-3">
                             <div className="footer-menu">
-                                <h3>Quick Links</h3>
+                                <h3>ลิงค์ด่วน</h3>
                                 <ul className="menu-list list-unstyled">
                                     <li className="menu-item">
-                                        <a href="#" className="nav-link">Home</a>
+                                        <a href="#" className="nav-link">หน้าหลัก</a>
                                     </li>
                                     <li className="menu-item">
-                                        <a href="#" className="nav-link">About us</a>
+                                        <a href="#" className="nav-link">เกี่ยวกับเรา</a>
                                     </li>
                                     <li className="menu-item">
-                                        <a href="#" className="nav-link">Offer </a>
+                                        <a href="#" className="nav-link">เสนอ </a>
                                     </li>
                                     <li className="menu-item">
-                                        <a href="#" className="nav-link">Services</a>
+                                        <a href="#" className="nav-link">บริการ</a>
                                     </li>
                                     <li className="menu-item">
-                                        <a href="#" className="nav-link">Conatct Us</a>
+                                        <a href="#" className="nav-link">ติดต่อเรา</a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div className="footer-menu">
-                                <h3>Help Center</h3>
+                                <h3>ศูนย์ช่วยเหลือ</h3>
                                 <ul className="menu-list list-unstyled">
                                     <li className="menu-item">
-                                        <a href="#" className="nav-link">FAQs</a>
+                                        <a href="#" className="nav-link">คำถามที่พบบ่อย</a>
                                     </li>
                                     <li className="menu-item">
-                                        <a href="#" className="nav-link">Payment</a>
+                                        <a href="#" className="nav-link">การชำระเงิน</a>
                                     </li>
                                     <li className="menu-item">
-                                        <a href="#" className="nav-link">Returns & Refunds</a>
+                                        <a href="#" className="nav-link">การคืนสินค้าและการคืนเงิน</a>
                                     </li>
                                     <li className="menu-item">
-                                        <a href="#" className="nav-link">Checkout</a>
+                                        <a href="#" className="nav-link">เช็คเอาท์</a>
                                     </li>
                                     <li className="menu-item">
-                                        <a href="#" className="nav-link">Delivery Information</a>
+                                        <a href="#" className="nav-link">ข้อมูลการจัดส่ง</a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                         <div className="col-md-3">
                             <div>
-                                <h3>Our Newsletter</h3>
-                                <p className="blog-paragraph fs-6">Subscribe to our newsletter to get updates about our grand offers.</p>
+                                <h3>จดหมายข่าวของเรา</h3>
+                                <p className="blog-paragraph fs-6">สมัครรับจดหมายข่าวของเราเพื่อรับข้อมูลอัปเดตเกี่ยวกับข้อเสนอพิเศษของเรา</p>
                                 <div className="search-bar border rounded-pill border-dark-subtle px-2">
                                     <form className="text-center d-flex align-items-center" action="" method="">
-                                        <input type="text" className="form-control border-0 bg-transparent" placeholder="Enter your email here" />
+                                        <input type="text" className="form-control border-0 bg-transparent" placeholder="กรอกอีเมล์ของคุณที่นี่" />
                                         <iconify-icon className="send-icon" icon="tabler:location-filled"></iconify-icon>
                                     </form>
                                 </div>

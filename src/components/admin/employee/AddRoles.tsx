@@ -8,6 +8,7 @@ import Store from "../../store/Store";
 const AddRoles: React.FC = () => {
   const navigate = useNavigate();
   const {token} = Store();
+  const [massage, setMassage] = useState("")
   const [role, setRole] = useState<IRole>({
     rolename: "",
     roleid:""
@@ -27,6 +28,8 @@ const AddRoles: React.FC = () => {
       console.log(response);
       if (response.data === "Create Success") {
         navigate("/userAdmin");
+      } else {
+        setMassage(response.data.errors.RoleName[0])
       }
     } catch (error) {
       console.log(error);
@@ -35,12 +38,12 @@ const AddRoles: React.FC = () => {
 
   return (
     <div className="container-fluid p-4">
-      <h2 className="fw-bold">Add Position</h2>
+      <h2 className="fw-bold">เพิ่มตำแหน่งงาน</h2>
       <div className="card">
         <div className="card bg-white p-4">
           <div className="m-4">
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label">Position</label>
+              <label className="col-sm-2 col-form-label">ตำแหน่งงาน</label>
               <div className="col-sm-10">
                 <input
                   type="text"
@@ -50,6 +53,7 @@ const AddRoles: React.FC = () => {
                     setRole({ ...role, rolename: e.target.value })
                   }
                 />
+                {massage && <label style={{color:'#dc3545'}}>{massage}</label>}
               </div>
             </div>
             <div className="row">
@@ -61,10 +65,10 @@ const AddRoles: React.FC = () => {
                     onSubmit();
                   }}
                 >
-                  Save
+                  บันทึก
                 </button>
-                <a href="/breeds" className="btn btn-danger">
-                  Cancle
+                <a href="/userAdmin" className="btn btn-danger">
+                  ยกเลิก
                 </a>
               </div>
             </div>

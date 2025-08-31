@@ -31,7 +31,7 @@ const Dashboard: React.FC = () => {
           setUser(responseUser.data);
         }
         const responseOrder = await axios.get<IGetOrder[]>(
-          "https://localhost:7092/api/Orders/GetAllOrder",
+          "https://localhost:7092/api/Orders/GetAllSale",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -40,7 +40,7 @@ const Dashboard: React.FC = () => {
         );
         if (responseOrder.status === 200) {
           const filterOrder = responseOrder.data.filter(
-            (x) => x.orderStatus !== "Pending"
+            (x) => x.orderStatus !== "ยังไม่ชำระเงิน"
           );
           setOrders(filterOrder);
         }
@@ -51,7 +51,7 @@ const Dashboard: React.FC = () => {
         });
         if (responseCat.status === 200) {
           const filterCat = responseCat.data.filter(
-            (x) => x.catStatus === "Avaliable"
+            (x) => x.catStatus === "ว่าง"
           );
           setCats(filterCat);
         }
@@ -68,7 +68,7 @@ const Dashboard: React.FC = () => {
       style={{ height: "100%", overflow: "hidden", overflowY: "auto" }}
     >
       <div className="mb-3">
-        <h2 className="fw-bold">Dashboard</h2>
+        <h2 className="fw-bold">แผงควบคุม</h2>
       </div>
       <section>
         <div className="row">
@@ -94,7 +94,7 @@ const Dashboard: React.FC = () => {
                   className="fw-normal mt-0 text-muted"
                   title="Number of Customers"
                 >
-                  Customers
+                  จำนวนลูกค้า
                 </h5>
                 <h3 className="mt-3 mb-3">{user.length}</h3>
               </div>
@@ -122,7 +122,7 @@ const Dashboard: React.FC = () => {
                   className="fw-normal mt-0 text-muted"
                   title="Number of Customers"
                 >
-                  Orders
+                  จำนวนคำสั่งซื้อ
                 </h5>
                 <h3 className="mt-3 mb-3">{orders.length}</h3>
               </div>
@@ -151,7 +151,7 @@ const Dashboard: React.FC = () => {
                   className="fw-normal mt-0 text-muted"
                   title="Number of Customers"
                 >
-                  Sales
+                  รายได้
                 </h5>
                 <h3 className="mt-3 mb-3">
                   <NumericFormat
@@ -200,7 +200,7 @@ const Dashboard: React.FC = () => {
                   className="fw-normal mt-0 text-muted"
                   title="Number of Customers"
                 >
-                  Cats in Stock
+                  จำนวนแมวในร้าน
                 </h5>
                 <h3 className="mt-3 mb-3">{cats.length}</h3>
               </div>

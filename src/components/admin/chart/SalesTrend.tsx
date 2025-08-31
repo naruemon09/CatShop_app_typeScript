@@ -83,7 +83,7 @@ const SalesTrend: React.FC = () => {
   return (
     <div className="card bg-white w-100 h-100 me-3">
       <div className="card-body">
-        <h3>Sales Trend</h3>
+        <h3>ยอดขาย</h3>
         <Line data={data} options={options} />
       </div>
     </div>

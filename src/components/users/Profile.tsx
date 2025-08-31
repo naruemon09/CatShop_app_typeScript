@@ -10,15 +10,15 @@ import type {
 import { useNavigate } from "react-router-dom";
 
 const Profile: React.FC = () => {
-  const { token , logout } = Store();
-  const navigate = useNavigate()
+  const { token, logout } = Store();
+  const navigate = useNavigate();
   const [province, setProvince] = useState<IProvince[]>([]);
   const [distric, setDistric] = useState<IDistrict[]>([]);
   const [subdistrict, setSubdistrict] = useState<ISubdistrict[]>([]);
   const [edit, setEdit] = useState(false);
 
   const [form, setForm] = useState<IRegister>({
-    username: "",
+    userName: "",
     firstname: "",
     lastname: "",
     email: "",
@@ -26,8 +26,8 @@ const Profile: React.FC = () => {
     phone: "",
     address: "",
     provinceId: 0,
-    disctricId: 0,
-    subdisctricId: 0,
+    districtId: 0,
+    subdistrictId: 0,
     zipcode: 0,
     password: "",
     gender: "",
@@ -56,18 +56,34 @@ const Profile: React.FC = () => {
         if (provinces.status === 200) {
           setProvince(provinces.data);
         }
+        const districtsResp = await axios.get<IDistrict[]>(
+          "https://localhost:7092/api/Address/GetDistrict"
+        );
+        const filteredDistricts = districtsResp.data.filter(
+          (d) => d.provinceId === response.data.provinceId
+        );
+        console.log(filteredDistricts);
+        setDistric(filteredDistricts);
+
+        const subdistrictsResp = await axios.get<ISubdistrict[]>(
+          "https://localhost:7092/api/Address/GetSubdistrict"
+        );
+        const filteredSubdistricts = subdistrictsResp.data.filter(
+          (s) => s.districtId === response.data.districtId
+        );
+        setSubdistrict(filteredSubdistricts);
       } catch (error) {
         console.log(error);
       }
     };
     getUser();
-  }, []);
+  }, [edit]);
 
   const onSubmit = async () => {
     try {
       console.log("user", form);
       const response = await axios.put(
-        `https://localhost:7092/api/Users/UpdateUserDetail/${token}`,
+        `https://localhost:7092/api/Users/UpdateUserDetail`,
         form,
         {
           headers: {
@@ -76,7 +92,7 @@ const Profile: React.FC = () => {
         }
       );
       console.log(response);
-      if (response.data === "Create Success") {
+      if (response.status === 200) {
         setEdit(false);
       }
     } catch (error) {
@@ -100,7 +116,7 @@ const Profile: React.FC = () => {
 
   const selectDistric = async (event: React.ChangeEvent<HTMLSelectElement>) => {
     const item = event.target.value;
-    setForm({ ...form, disctricId: Number(item) });
+    setForm({ ...form, districtId: Number(item) });
     const subdistricts = await axios.get<ISubdistrict[]>(
       "https://localhost:7092/api/Address/GetSubdistrict"
     );
@@ -113,11 +129,11 @@ const Profile: React.FC = () => {
   const selectSubdistrict = async (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
-    const item = event.target.value;
+    const item = event.target.value || form.subdistrictId;
     const findZipcode = subdistrict.find((r) => r.id === Number(item))!;
     setForm({
       ...form,
-      subdisctricId: findZipcode.id,
+      subdistrictId: findZipcode.id,
       zipcode: findZipcode.zipCode,
     });
   };
@@ -125,35 +141,34 @@ const Profile: React.FC = () => {
   const deleteAccount = async () => {
     try {
       const response = await axios.put(
-      "https://localhost:7092/api/Users/updateStatusToken",
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    if (response.status === 200) {
-       logout();
-        navigate("/account");
+        "https://localhost:7092/api/Users/updateStatusToken",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        logout();
+        navigate("/บัญชีผู้ใช้");
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-    
   };
 
   return (
     <div className="container mx-auto m-4">
       <div className="d-flex justify-content-between align-items-center">
-        <h2 className="fw-bold">Profile</h2>
+        <h2 className="fw-bold">โปรไฟล์</h2>
         {edit === false ? (
           <button
             type="button"
             className="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1"
             onClick={() => setEdit(true)}
           >
-            Edit Profile
+            แก้ไขโปรไฟล์
           </button>
         ) : (
           ""
@@ -163,10 +178,10 @@ const Profile: React.FC = () => {
         <div className="card bg-white p-4 border shadow-sm">
           <div className="m-2">
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label fw-bold">
-                Username
+              <label className="col-sm-3 col-form-label fw-bold">
+                ชื่อผู้ใช้
               </label>
-              <div className="col-md-5 mb-3">
+              <div className="col-md-9 mb-3">
                 <input
                   type="text"
                   className="form-control-plaintext form-control-lg"
@@ -175,16 +190,16 @@ const Profile: React.FC = () => {
                   onChange={(e) =>
                     setForm({ ...form, firstname: e.target.value })
                   }
-                  placeholder="Enter Your Username"
+                  placeholder="กรอก ชื่อผู้ใช้"
                 />
               </div>
             </div>
 
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label fw-bold">Name</label>
+              <label className="col-sm-3 col-form-label fw-bold">ชื่อ - นามสกุล</label>
               {edit === true ? (
                 <>
-                  <div className="col-md-5 mb-3">
+                  <div className="col-md-4 mb-3">
                     <input
                       type="text"
                       className="form-control form-control-lg"
@@ -192,7 +207,7 @@ const Profile: React.FC = () => {
                       onChange={(e) =>
                         setForm({ ...form, firstname: e.target.value })
                       }
-                      placeholder="Enter Your Firstname"
+                      placeholder="กรอก ชื่อ"
                     />
                   </div>
 
@@ -204,12 +219,12 @@ const Profile: React.FC = () => {
                       onChange={(e) =>
                         setForm({ ...form, lastname: e.target.value })
                       }
-                      placeholder="Enter Your Lastname"
+                      placeholder="กรอก นามสกุล"
                     />
                   </div>
                 </>
               ) : (
-                <div className="col-md-10 mb-3">
+                <div className="col-md-9 mb-3">
                   <label className="px-2">
                     {form.firstname} {form.lastname}
                   </label>
@@ -218,27 +233,27 @@ const Profile: React.FC = () => {
             </div>
 
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label fw-bold">
-                Birthdate
+              <label className="col-sm-3 col-form-label fw-bold">
+                วัน / เดือน / ปี เกิด
               </label>
-              <div className="col-md-10 mb-3">
+              <div className="col-md-9 mb-3">
                 <label className="px-2">{form.birthdate}</label>
               </div>
             </div>
 
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label fw-bold">Gender</label>
-              <div className="col-md-10 mb-3">
+              <label className="col-sm-3 col-form-label fw-bold">เพศ</label>
+              <div className="col-md-9 mb-3">
                 <label className="px-2">
-                  {form.gender === "0" ? "Male" : "Female"}
+                  {form.gender === "0" ? "ชาย" : "หญิง"}
                 </label>
               </div>
             </div>
 
             <div className="mb-3 row">
-              <label className="col-sm-2 col-form-label fw-bold">Phone</label>
+              <label className="col-sm-3 col-form-label fw-bold">โทรศัพท์</label>
               {edit === true ? (
-                <div className="col-md-10 mb-3">
+                <div className="col-md-9 mb-3">
                   <input
                     type="tel"
                     className="form-control form-control-lg"
@@ -246,40 +261,63 @@ const Profile: React.FC = () => {
                     onChange={(e) =>
                       setForm({ ...form, phone: e.target.value })
                     }
-                    placeholder="Enter Your Phone"
+                    placeholder="กรอก หมายเลขโทรศัพท์"
                   />
                 </div>
               ) : (
-                <div className="col-md-10 mb-3">
+                <div className="col-md-9 mb-3">
                   <label className="px-2">{form.phone}</label>
                 </div>
               )}
             </div>
+
+            <div className="mb-3 row">
+              <label className="col-sm-3 col-form-label fw-bold">อีเมล</label>
+              {edit === true ? (
+                <div className="col-md-9 mb-3">
+                  <input
+                    type="email"
+                    className="form-control form-control-lg"
+                    value={form.email}
+                    onChange={(e) =>
+                      setForm({ ...form, email: e.target.value })
+                    }
+                    placeholder="กรอก อีเมล"
+                  />
+                </div>
+              ) : (
+                <div className="col-md-9 mb-3">
+                  <label className="px-2">{form.email}</label>
+                </div>
+              )}
+            </div>
+
             {edit === true ? (
               <>
                 <div className="mb-3 row">
-                  <label className="col-sm-2 col-form-label fw-bold">
-                    Address
+                  <label className="col-sm-3 col-form-label fw-bold">
+                    ที่อยู่
                   </label>
 
-                  <div className="col-md-10 mb-3">
+                  <div className="col-md-9 mb-3">
                     <textarea
                       className="form-control form-control-lg"
                       value={form.address}
                       onChange={(e) =>
                         setForm({ ...form, address: e.target.value })
                       }
-                      placeholder="Enter Your Address"
+                      placeholder="กรอก ที่อยู่"
                     />
                   </div>
                 </div>
                 <div className="mb-3 row">
-                  <div className="col offset-md-2 mb-3">
+                  <div className="col offset-md-3 mb-3">
                     <select
                       className="form-control dropdown-toggle"
                       onChange={(e) => selectProvince(e)}
+                      value={form.provinceId}
                     >
-                      <option className="dropdown-item">Select Province</option>
+                      <option className="dropdown-item">เลือก จังหวัด</option>
 
                       {province.map((item, index) => (
                         <option
@@ -287,7 +325,7 @@ const Profile: React.FC = () => {
                           className="dropdown-item"
                           value={item.id}
                         >
-                          {item.nameInEnglish}
+                          {item.nameInThai}
                         </option>
                       ))}
                     </select>
@@ -295,9 +333,10 @@ const Profile: React.FC = () => {
                   <div className="col mb-3">
                     <select
                       className="form-control dropdown-toggle"
+                      value={form.districtId}
                       onChange={(e) => selectDistric(e)}
                     >
-                      <option className="dropdown-item">Select Distric</option>
+                      <option className="dropdown-item">เลือก เขต/อำเภอ</option>
 
                       {distric.map((item, index) => (
                         <option
@@ -305,7 +344,7 @@ const Profile: React.FC = () => {
                           className="dropdown-item"
                           value={item.id}
                         >
-                          {item.nameInEnglish}
+                          {item.nameInThai}
                         </option>
                       ))}
                     </select>
@@ -313,10 +352,11 @@ const Profile: React.FC = () => {
                   <div className="col mb-3">
                     <select
                       className="form-control dropdown-toggle"
+                      value={form.subdistrictId}
                       onChange={(e) => selectSubdistrict(e)}
                     >
                       <option className="dropdown-item">
-                        Select Subdistrict
+                        เลือก แขวง/ตำบล
                       </option>
                       {subdistrict.map((item, index) => (
                         <option
@@ -324,7 +364,7 @@ const Profile: React.FC = () => {
                           className="dropdown-item"
                           value={item.id}
                         >
-                          {item.nameInEnglish}
+                          {item.nameInThai}
                         </option>
                       ))}
                     </select>
@@ -342,11 +382,11 @@ const Profile: React.FC = () => {
               </>
             ) : (
               <div className="mb-3 row">
-                <label className="col-sm-2 col-form-label fw-bold">
-                  Address
+                <label className="col-sm-3 col-form-label fw-bold">
+                  ที่อยู่
                 </label>
-                <div className="col-md-10 mb-3">
-                  <label className="px-2">{form.address}</label>
+                <div className="col-md-9 mb-3">
+                  <label className="px-2">{form.addressfull}</label>
                 </div>
               </div>
             )}
@@ -360,10 +400,10 @@ const Profile: React.FC = () => {
                       onSubmit();
                     }}
                   >
-                    Save
+                    บันทึก
                   </button>
-                  <a href="/profile" className="btn btn-danger">
-                    Cancle
+                  <a href="/โปรไฟล์" className="btn btn-danger">
+                    ยกเลิก
                   </a>
                 </div>
               </div>
@@ -380,7 +420,7 @@ const Profile: React.FC = () => {
           deleteAccount();
         }}
       >
-        Detele Account
+        ลบบัญชีผู้ใช้
       </button>
     </div>
   );

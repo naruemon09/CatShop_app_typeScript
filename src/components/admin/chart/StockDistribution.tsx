@@ -69,7 +69,7 @@ const StockDistribution: React.FC = () => {
   return (
     <div className="card bg-white w-100 h-100 me-3">
       <div className="card-body">
-        <h3>Cat Stock Distribution</h3>
+        <h3>จำนวนแมวในร้านแต่ละสายพันธุ์</h3>
         <Doughnut data={data} />
       </div>
     </div>
